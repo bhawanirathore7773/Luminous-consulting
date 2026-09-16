@@ -1,0 +1,22 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ page.title }} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ page.title }} for {{ site_name }}.{% endblock %}
+
+{% block content %}
+<section class="bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-16">
+        <h1 class="text-4xl font-semibold tracking-tight text-navy-950">{{ page.title }}</h1>
+        <p class="mt-2 text-sm text-ink/50">Last updated: {{ page.last_updated|date:"F j, Y" }}</p>
+
+        <div class="mt-6 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+            This page is a starting template and has not been reviewed by qualified legal counsel. Have it
+            reviewed and adapted to your actual practices and jurisdiction before relying on it.
+        </div>
+
+        <div class="mt-8 max-w-none leading-relaxed text-ink/80 [&>p]:mb-4">
+            {{ page.content|linebreaks }}
+        </div>
+    </div>
+</section>
+{% endblock %}
