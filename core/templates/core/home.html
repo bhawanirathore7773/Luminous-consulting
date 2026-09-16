@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ site_name }} — SAP Consulting & Transformation Partner{% endblock %}
+
+{% block content %}
+    {% include "core/partials/hero.html" %}
+    {% include "core/partials/capability_strip.html" %}
+    {% include "core/partials/problem_selector.html" %}
+    {% include "core/partials/services_teaser.html" %}
+    {% if industries %}
+        {% include "core/partials/related_grid.html" with heading="Industries we work with" items=industries %}
+    {% endif %}
+    {% include "core/partials/outcomes.html" %}
+    {% if case_studies %}
+        {% include "core/partials/related_grid.html" with heading="Representative use cases" items=case_studies %}
+    {% endif %}
+    {% include "core/partials/assessment_cta.html" %}
+    {% include "core/partials/final_cta.html" %}
+{% endblock %}

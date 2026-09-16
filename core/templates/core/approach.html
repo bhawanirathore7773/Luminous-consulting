@@ -1,0 +1,40 @@
+{% extends "core/base.html" %}
+
+{% block title %}Our approach — {{ site_name }}{% endblock %}
+{% block meta_description %}From discovery to value — the six-stage methodology behind every engagement, regardless of size.{% endblock %}
+
+{% block content %}
+<section class="border-b border-gray-200 bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-16 text-center">
+        <h1 class="text-4xl font-semibold tracking-tight text-navy-950">From discovery to value.</h1>
+        <p class="mt-4 text-lg leading-relaxed text-ink/70">Every engagement follows the same six stages — small engagements move through them quickly, large ones spend more time in each, but the stages don't change.</p>
+    </div>
+</section>
+
+<section class="bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+        <div class="divide-y divide-gray-200 border-t border-gray-200">
+            {% for step in methodology_steps %}
+                <details class="group py-6" {% if forloop.first %}open{% endif %}>
+                    <summary class="flex cursor-pointer list-none items-center justify-between gap-4">
+                        <span class="flex items-center gap-4">
+                            <span class="text-sm font-semibold text-accent">{{ step.number }}</span>
+                            <span class="text-xl font-semibold tracking-tight text-navy-950">{{ step.name }}</span>
+                        </span>
+                        <svg class="h-4 w-4 flex-none text-ink/50 transition-transform duration-150 group-open:rotate-45" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                            <path d="M8 2V14M2 8H14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </summary>
+                    <ul class="mt-4 flex flex-wrap gap-2 pl-9">
+                        {% for item in step.items %}
+                            <li class="rounded-md border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm text-ink">{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+                </details>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% include "core/partials/final_cta.html" %}
+{% endblock %}
