@@ -1,0 +1,21 @@
+<section class="border-b border-gray-200 bg-white">
+    <div class="mx-auto max-w-7xl px-5 py-16 sm:px-6 md:py-20">
+        <div class="max-w-2xl">
+            <p class="text-sm font-semibold uppercase tracking-[0.16em] text-accent">Customer voices</p>
+            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-navy-950 md:text-4xl">What public customer stories tell us.</h2>
+            <p class="mt-4 text-base leading-7 text-ink/70">These are short excerpts from SAP-published customer stories, not testimonials for Luminous Consulting.</p>
+        </div>
+        <div class="mt-10 grid gap-4 md:grid-cols-2">
+            {% for voice in public_customer_voices %}
+                <figure class="rounded-lg border border-gray-200 bg-gray-50 p-6">
+                    <blockquote class="text-lg leading-8 text-navy-950">“{{ voice.quote }}”</blockquote>
+                    <figcaption class="mt-5">
+                        <p class="text-sm font-semibold text-navy-950">{{ voice.person }}</p>
+                        <p class="mt-1 text-sm text-gray-500">{{ voice.company }} · Published by SAP</p>
+                        <a href="{{ voice.url }}" target="_blank" rel="noopener noreferrer" class="mt-3 inline-block text-sm font-semibold text-accent hover:text-accent-dark">Source ↗</a>
+                    </figcaption>
+                </figure>
+            {% endfor %}
+        </div>
+    </div>
+</section>
