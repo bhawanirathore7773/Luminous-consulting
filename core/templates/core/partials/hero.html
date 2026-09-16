@@ -1,24 +1,30 @@
 {% load ui_tags %}
 <section class="border-b border-gray-200 bg-white">
-    <div class="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:grid-cols-2 md:py-28">
+    <div class="mx-auto grid max-w-7xl items-center gap-12 px-5 py-16 sm:px-6 md:grid-cols-2 md:py-24 lg:gap-20">
         <div>
-            <h1 class="max-w-lg text-4xl font-semibold leading-tight tracking-tight text-navy-950 md:text-5xl">
-                Transform SAP complexity into business advantage.
+            <p class="text-sm font-semibold uppercase tracking-[0.16em] text-accent">SAP consulting & transformation</p>
+            <h1 class="mt-4 max-w-2xl text-4xl font-semibold leading-[1.08] tracking-tight text-navy-950 md:text-5xl lg:text-6xl">
+                Make SAP simpler. Make the business faster.
             </h1>
-            <p class="mt-6 max-w-md text-lg leading-relaxed text-ink/80">
-                From SAP consulting and S/4HANA transformation to integration, development and managed services, we help enterprises modernize, optimize and operate their SAP landscape with confidence.
+            <p class="mt-6 max-w-xl text-lg leading-8 text-ink/75">
+                Practical SAP consulting for S/4HANA transformation, integration, development, data and managed services — explained clearly and delivered around your business goals.
             </p>
-            <div class="mt-8 flex flex-wrap gap-4">
+            <div class="mt-8 flex flex-wrap gap-3">
                 {% button "Talk to an SAP Expert" "/contact/" "primary" %}
-                {% button "Explore SAP services" "/services/" "secondary" %}
+                {% button "Explore services" "/services/" "secondary" %}
+            </div>
+            <div class="mt-8 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink/65">
+                <span>Strategy & roadmap</span>
+                <span>S/4HANA</span>
+                <span>Integration</span>
+                <span>BTP & data</span>
+                <span>AMS</span>
             </div>
         </div>
 
-        <div class="mx-auto w-full max-w-xs" aria-hidden="true">
-            <svg viewBox="0 0 300 468" class="h-auto w-full" role="img" aria-label="SAP landscape stack: business processes, SAP core, S/4HANA, SAP BTP, integration, data and analytics, and automation.">
-                {% comment %} Layer order top-to-bottom mirrors the flow described in the hero copy: process → core → transformation → platform → connectivity → insight → automation. {% endcomment %}
+        <div class="mx-auto w-full max-w-md" aria-hidden="true">
+            <svg viewBox="0 0 300 468" class="h-auto w-full" role="img" aria-label="SAP landscape from business processes through SAP core, S/4HANA, BTP, integration, data and automation.">
                 <line x1="150" y1="8" x2="150" y2="460" stroke="#E2E6EB" stroke-width="2"/>
-
                 {% for layer in hero_stack %}
                     <rect x="20" y="{{ layer.y }}" width="260" height="44" rx="4"
                           style="fill:{{ layer.fill }}; stroke:{{ layer.stroke }};" stroke-width="1"/>
@@ -27,7 +33,6 @@
                         {{ layer.label }}
                     </text>
                 {% endfor %}
-
                 <circle cx="150" cy="30" r="4" style="fill:rgb(var(--color-accent));" class="flow-pulse"/>
             </svg>
         </div>
