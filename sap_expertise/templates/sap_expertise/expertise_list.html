@@ -1,0 +1,28 @@
+{% extends "core/base.html" %}
+
+{% block title %}SAP expertise — {{ site_name }}{% endblock %}
+{% block meta_description %}The SAP platforms, technologies, business applications, and functional areas covered by our services and industry work.{% endblock %}
+
+{% block content %}
+<section class="border-b border-gray-200 bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-16 text-center">
+        <h1 class="text-4xl font-semibold tracking-tight text-navy-950">SAP expertise</h1>
+        <p class="mt-4 text-lg leading-relaxed text-ink/70">The platforms, technologies, applications, and functional areas our services and industry work actually cover.</p>
+    </div>
+</section>
+
+{% for group in grouped_expertise %}
+    <section class="{% cycle 'bg-gray-50' 'bg-white' %}">
+        <div class="mx-auto max-w-4xl px-6 py-14">
+            <h2 class="text-2xl font-semibold tracking-tight text-navy-950">{{ group.label }}</h2>
+            <div class="mt-6 flex flex-wrap gap-3">
+                {% for item in group.items %}
+                    <span class="rounded-md border border-gray-200 px-4 py-2 text-sm font-medium text-ink">{{ item.name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endfor %}
+
+{% include "core/partials/final_cta.html" with cta_heading="Have a specific module or technology question?" %}
+{% endblock %}
