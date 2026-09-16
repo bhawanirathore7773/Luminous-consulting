@@ -1,27 +1,31 @@
 <footer class="border-t border-gray-200 bg-navy-950 text-white">
-    <div class="mx-auto max-w-7xl px-6 py-16">
-        <div class="grid grid-cols-2 gap-10 md:grid-cols-5">
-            <div class="col-span-2 md:col-span-1">
-                <p class="text-lg font-semibold tracking-tight">{{ site_name }}</p>
-                <p class="mt-3 max-w-xs text-sm text-white/60">
-                    SAP consulting, transformation, integration and managed services for enterprise SAP landscapes.
+    <div class="mx-auto max-w-7xl px-5 py-16 sm:px-6 md:py-20">
+        <div class="grid gap-10 md:grid-cols-12">
+            <div class="md:col-span-4">
+                <a href="/" class="text-xl font-semibold tracking-tight">{{ site_name }}</a>
+                <p class="mt-4 max-w-sm text-sm leading-6 text-white/65">
+                    SAP consulting for transformation, integration, development, data and managed services. Clear advice, practical delivery.
                 </p>
+                <a href="/contact/" class="mt-6 inline-flex text-sm font-semibold text-white hover:text-white/80">Start a conversation →</a>
             </div>
-            {% for column in footer_columns %}
-                <div>
-                    <p class="text-sm font-semibold text-white/90">{{ column.heading }}</p>
-                    <ul class="mt-4 space-y-2.5">
-                        {% for link in column.links %}
-                            <li><a href="{{ link.url }}" class="text-sm text-white/60 hover:text-white">{{ link.label }}</a></li>
-                        {% endfor %}
-                    </ul>
+            <div class="md:col-span-8">
+                <div class="grid grid-cols-2 gap-x-8 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
+                    {% for column in footer_columns %}
+                        <div>
+                            <p class="text-sm font-semibold text-white">{{ column.heading }}</p>
+                            <ul class="mt-4 space-y-3">
+                                {% for link in column.links %}
+                                    <li><a href="{{ link.url }}" class="text-sm text-white/60 transition-colors hover:text-white">{{ link.label }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endfor %}
                 </div>
-            {% endfor %}
+            </div>
         </div>
-
-        <div class="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/50 md:flex-row md:items-center md:justify-between">
-            <p>&copy; {% now "Y" %} {{ site_name }}. All rights reserved.</p>
-            <p>Contact details pending — add a business email and phone once confirmed.</p>
+        <div class="mt-14 flex flex-col gap-4 border-t border-white/10 pt-7 text-xs text-white/45 md:flex-row md:items-center md:justify-between">
+            <p>© {% now "Y" %} {{ site_name }}. All rights reserved.</p>
+            <p>SAP is a trademark of SAP SE or its affiliates. Luminous Consulting is independently operated.</p>
         </div>
     </div>
 </footer>
