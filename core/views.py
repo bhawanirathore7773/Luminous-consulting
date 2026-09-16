@@ -37,6 +37,73 @@ PROBLEM_TO_SERVICE = [
     {"problem": "Not sure", "service": "Talk to an SAP Expert", "url": "/contact/"},
 ]
 
+PUBLIC_CUSTOMER_STORIES = [
+    {
+        "mark": "SC",
+        "company": "Samsung C&T",
+        "industry": "Construction",
+        "title": "S/4HANA + BTP for construction",
+        "summary": "A public SAP story covering S/4HANA Cloud Private Edition, SAP BTP and Integration Suite for a complex global construction landscape.",
+        "url": "https://www.sap.com/asset/dynamic/2025/06/ce5ba95c-0a7f-0010-bca6-c68f7e60039b.html",
+    },
+    {
+        "mark": "SE",
+        "company": "Schneider Electric",
+        "industry": "Manufacturing",
+        "title": "Cloud-native transport planning",
+        "summary": "A public 2026 SAP Innovation Awards story using BTP, Datasphere, CAP, Fiori and event-driven services while keeping the S/4HANA core clean.",
+        "url": "https://www.sap.com/documents/2026/02/ca37ea09-3f7f-0010-bca6-c68f7e60039b.html",
+    },
+    {
+        "mark": "VH",
+        "company": "Vorwerk",
+        "industry": "Retail",
+        "title": "Digital direct-sales experience",
+        "summary": "A public SAP story using BTP and Integration Suite to connect a digital sales solution with SAP and third-party back-end systems.",
+        "url": "https://www.sap.com/netherlands/asset/dynamic/2024/11/d8b472ef-e17e-0010-bca6-c68f7e60039b.html",
+    },
+    {
+        "mark": "HC",
+        "company": "The Hershey Company",
+        "industry": "Consumer products",
+        "title": "Data, analytics and clean core",
+        "summary": "A public SAP story combining S/4HANA, BTP, Datasphere and Analytics Cloud to make enterprise data easier to access and trust.",
+        "url": "https://www.sap.com/netherlands/asset/dynamic/2024/09/44538d45-d57e-0010-bca6-c68f7e60039b.html",
+    },
+    {
+        "mark": "DA",
+        "company": "Daikin Industries",
+        "industry": "Manufacturing",
+        "title": "AI-powered forecasting",
+        "summary": "A public 2026 SAP Innovation Awards story using BTP and AI to improve forecasting across a large branch network.",
+        "url": "https://www.sap.com/documents/2026/03/5047963c-437f-0010-bca6-c68f7e60039b.html",
+    },
+    {
+        "mark": "SS",
+        "company": "Sasol",
+        "industry": "Logistics",
+        "title": "Modern transportation management",
+        "summary": "A public SAP Innovation Awards story covering S/4HANA Supply Chain, BTP and logistics integration for transportation planning and execution.",
+        "url": "https://www.sap.com/documents/2026/03/a007e64f-437f-0010-bca6-c68f7e60039b.html",
+    },
+]
+
+PUBLIC_CUSTOMER_VOICES = [
+    {
+        "quote": "SAP BTP and SAP Integration Suite enabled a digital solution connected to SAP and third-party systems.",
+        "person": "Adnan Gusinjac",
+        "company": "Vorwerk Group",
+        "url": "https://www.sap.com/netherlands/asset/dynamic/2024/11/d8b472ef-e17e-0010-bca6-c68f7e60039b.html",
+    },
+    {
+        "quote": "SAP Integration Suite helped connect systems efficiently and support real-time decision-making.",
+        "person": "Hyo-Seung Nam",
+        "company": "Samsung C&T Corporation",
+        "url": "https://www.sap.com/asset/dynamic/2025/06/ce5ba95c-0a7f-0010-bca6-c68f7e60039b.html",
+    },
+]
+
+
 
 def _stack_layer(label, index, emphasis):
     y = 8 + index * 68
@@ -85,6 +152,8 @@ class HomeView(TemplateView):
         context["capabilities"] = CAPABILITY_CATEGORIES
         context["problem_options"] = PROBLEM_TO_SERVICE
         context["hero_stack"] = HERO_STACK
+        context["public_customer_stories"] = PUBLIC_CUSTOMER_STORIES
+        context["public_customer_voices"] = PUBLIC_CUSTOMER_VOICES
         return context
 
 
