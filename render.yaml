@@ -1,0 +1,31 @@
+services:
+  - type: web
+    name: luminous-consulting
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /healthz/
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: SITE_NAME
+        value: "Luminous Consulting"
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: RUN_SEED_DATA
+        value: "true"
+      - key: WEB_CONCURRENCY
+        value: "2"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: luminous-consulting-db
+          property: connectionString
+
+databases:
+  - name: luminous-consulting-db
+    plan: free
