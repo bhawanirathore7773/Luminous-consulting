@@ -1,0 +1,43 @@
+{% extends "core/base.html" %}
+
+{% block title %}Thank you — {{ site_name }}{% endblock %}
+
+{% block content %}
+<section class="bg-white">
+    <div class="mx-auto max-w-2xl px-6 py-20 text-center">
+        <h1 class="text-4xl font-semibold tracking-tight text-navy-950">Thanks — we've got it.</h1>
+        <p class="mt-4 text-lg leading-relaxed text-ink/70">Here's what happens next.</p>
+
+        <ol class="mt-10 space-y-6 text-left">
+            <li class="flex gap-4">
+                <span class="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-navy-950 text-sm font-semibold text-white">1</span>
+                <div>
+                    <p class="font-medium text-navy-950">Request received</p>
+                    <p class="text-sm text-ink/70">Your details have been logged for review.</p>
+                </div>
+            </li>
+            <li class="flex gap-4">
+                <span class="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-navy-950 text-sm font-semibold text-white">2</span>
+                <div>
+                    <p class="font-medium text-navy-950">Expert review</p>
+                    <p class="text-sm text-ink/70">An SAP specialist reviews what you've shared before reaching out.</p>
+                </div>
+            </li>
+            <li class="flex gap-4">
+                <span class="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-navy-950 text-sm font-semibold text-white">3</span>
+                <div>
+                    <p class="font-medium text-navy-950">Consultation</p>
+                    <p class="text-sm text-ink/70">We'll reach out to schedule a conversation.</p>
+                </div>
+            </li>
+            <li class="flex gap-4">
+                <span class="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-navy-950 text-sm font-semibold text-white">4</span>
+                <div>
+                    <p class="font-medium text-navy-950">Recommended next steps</p>
+                    <p class="text-sm text-ink/70">You'll leave the consultation with clear, specific next steps.</p>
+                </div>
+            </li>
+        </ol>
+    </div>
+</section>
+{% endblock %}

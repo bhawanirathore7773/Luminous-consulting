@@ -1,0 +1,105 @@
+{% extends "core/base.html" %}
+
+{% block title %}Contact — {{ site_name }}{% endblock %}
+{% block meta_description %}Tell us what you're trying to solve, and we'll follow up with the right SAP specialist.{% endblock %}
+
+{% block content %}
+<section class="border-b border-gray-200 bg-white">
+    <div class="mx-auto max-w-2xl px-6 py-16 text-center">
+        <h1 class="text-4xl font-semibold tracking-tight text-navy-950">Tell us what you're trying to solve.</h1>
+        <p class="mt-4 text-lg leading-relaxed text-ink/70">Share a few details and we'll follow up with the right SAP specialist.</p>
+        {% if from_assessment %}
+            <p class="mt-4 rounded-md border border-accent/30 bg-accent/5 px-4 py-3 text-sm text-navy-950">
+                Following up on your SAP health assessment — we've carried your summary into the message below.
+            </p>
+        {% endif %}
+    </div>
+</section>
+
+<section class="bg-white">
+    <div class="mx-auto max-w-2xl px-6 pb-20">
+        <form method="post" novalidate class="space-y-6">
+            {% csrf_token %}
+            {{ form.website }}
+
+            {% if form.non_field_errors %}
+                <div class="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="grid gap-6 sm:grid-cols-2">
+                <div>
+                    <label class="block text-sm font-medium text-ink">Name</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}<p class="mt-1 text-xs text-red-600">{{ form.name.errors.0 }}</p>{% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-ink">Work email</label>
+                    {{ form.work_email }}
+                    {% if form.work_email.errors %}<p class="mt-1 text-xs text-red-600">{{ form.work_email.errors.0 }}</p>{% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-ink">Company</label>
+                    {{ form.company }}
+                    {% if form.company.errors %}<p class="mt-1 text-xs text-red-600">{{ form.company.errors.0 }}</p>{% endif %}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-ink">Job title</label>
+                    {{ form.job_title }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-ink">Country</label>
+                    {{ form.country }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-ink">Phone</label>
+                    {{ form.phone }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-ink">SAP environment</label>
+                    {{ form.sap_environment }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-ink">Current SAP system</label>
+                    {{ form.current_sap_system }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-ink">Project stage</label>
+                    {{ form.project_stage }}
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-ink">Timeline</label>
+                    {{ form.timeline }}
+                </div>
+                <div class="sm:col-span-2">
+                    <label class="block text-sm font-medium text-ink">Estimated scope</label>
+                    {{ form.estimated_scope }}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-ink">Required services</label>
+                <div class="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
+                    {% for checkbox in form.required_services %}
+                        <label class="flex items-center gap-2 text-sm text-ink">
+                            {{ checkbox.tag }}
+                            {{ checkbox.choice_label }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-ink">Message</label>
+                {{ form.message }}
+            </div>
+
+            <button type="submit" class="w-full rounded-md bg-accent px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-accent-dark sm:w-auto">
+                Request consultation
+            </button>
+            <p class="text-xs text-ink/50">We'll review your request and follow up — see what happens next after you submit.</p>
+        </form>
+    </div>
+</section>
+{% endblock %}
