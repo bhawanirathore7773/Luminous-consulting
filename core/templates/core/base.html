@@ -4,30 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0B1220">
     <title>{% block title %}SAP Consulting & Transformation Partner{% endblock %}</title>
     <meta name="description" content="{% block meta_description %}SAP consulting, S/4HANA transformation, integration, development and managed services for enterprise SAP landscapes.{% endblock %}">
+    <meta name="robots" content="{% block robots %}index,follow,max-image-preview:large{% endblock %}">
     <link rel="canonical" href="{% block canonical %}{{ request.build_absolute_uri }}{% endblock %}">
-    {% block schema %}{% endblock %}
+
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ site_name }}">
+    <meta property="og:title" content="{% block og_title %}{{ site_name }} | SAP Consulting & Transformation{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}SAP consulting, S/4HANA, BTP, integration, development, data and managed services.{% endblock %}">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{% static 'core/img/og-default.svg' %}">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ site_name }} | SAP Consulting{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}SAP consulting, S/4HANA, BTP, integration and managed services.{% endblock %}">
+
+    {% block schema %}
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "{{ site_name|escapejs }}",
+      "url": "{{ request.scheme }}://{{ request.get_host }}/",
+      "description": "SAP consulting, S/4HANA transformation, integration, development, data and managed services.",
+      "areaServed": "Worldwide",
+      "serviceType": ["SAP Consulting", "SAP S/4HANA", "SAP Integration", "SAP BTP", "SAP Development", "SAP Data & Analytics", "SAP Managed Services"]
+    }
+    </script>
+    {% endblock %}
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="{% static 'core/css/dist/styles.css' %}">
 </head>
 <body class="bg-white text-ink antialiased">
-    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-navy-950 focus:px-4 focus:py-2 focus:text-white">
-        Skip to main content
-    </a>
-
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-navy-950 focus:px-4 focus:py-2 focus:text-white">Skip to main content</a>
     {% include "core/partials/navbar.html" %}
-
-    <main id="main-content">
-        {% block content %}{% endblock %}
-    </main>
-
+    <main id="main-content">{% block content %}{% endblock %}</main>
     {% include "core/partials/footer.html" %}
-
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.14.1/dist/cdn.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
