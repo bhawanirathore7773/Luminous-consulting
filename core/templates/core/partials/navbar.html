@@ -45,19 +45,20 @@
         <!-- The trigger stays at the same visual position. When open it becomes
              fixed to the viewport so the X remains available while the drawer scrolls. -->
         <button type="button"
-                class="relative z-[130] flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-navy-950 transition-colors duration-200 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 lg:hidden"
-                @click.stop="mobileOpen = true"
+                class="relative z-[150] flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-navy-950 transition-colors duration-200 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 lg:hidden"
+                :class="mobileOpen ? 'fixed right-5 top-4 bg-white shadow-sm ring-1 ring-gray-200' : ''"
+                @click.stop="mobileOpen = !mobileOpen"
                 :aria-expanded="mobileOpen"
                 aria-controls="mobile-navigation"
-                aria-label="Open navigation menu">
+                :aria-label="mobileOpen ? 'Close navigation menu' : 'Open navigation menu'">
             <span class="sr-only" x-text="mobileOpen ? 'Close menu' : 'Open menu'">Menu</span>
             <span class="relative block h-6 w-6" aria-hidden="true">
-                <span class="absolute left-1/2 top-[7px] block h-0.5 w-5 -translate-x-1/2 rounded bg-current transition-all duration-200"
-                      :class="mobileOpen ? 'top-1/2 rotate-45' : ''"></span>
-                <span class="absolute left-1/2 top-1/2 block h-0.5 w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-current transition-all duration-200"
-                      :class="mobileOpen ? 'scale-x-0 opacity-0' : ''"></span>
-                <span class="absolute left-1/2 bottom-[7px] block h-0.5 w-5 -translate-x-1/2 rounded bg-current transition-all duration-200"
-                      :class="mobileOpen ? 'top-1/2 -translate-y-1/2 -rotate-45' : ''"></span>
+                <span class="absolute left-1/2 top-1/2 block h-0.5 w-6 -translate-x-1/2 -translate-y-1/2 rounded bg-current transition-transform duration-200 ease-out"
+                      :class="mobileOpen ? 'rotate-45' : '-translate-y-[7px]'"></span>
+                <span class="absolute left-1/2 top-1/2 block h-0.5 w-6 -translate-x-1/2 -translate-y-1/2 rounded bg-current transition-all duration-200 ease-out"
+                      :class="mobileOpen ? 'scale-x-0 opacity-0' : 'scale-x-100 opacity-100'"></span>
+                <span class="absolute left-1/2 top-1/2 block h-0.5 w-6 -translate-x-1/2 -translate-y-1/2 rounded bg-current transition-transform duration-200 ease-out"
+                      :class="mobileOpen ? '-rotate-45' : 'translate-y-[7px]'"></span>
             </span>
         </button>
     </div>
@@ -69,7 +70,7 @@
          x-transition:leave="transition-opacity ease-in duration-200"
          x-transition:leave-start="opacity-100"
          x-transition:leave-end="opacity-0"
-         @click="mobileOpen = false"
+         @click.self="mobileOpen = false"
          class="fixed inset-0 z-[110] bg-navy-950/35 backdrop-blur-[2px] lg:hidden"
          style="display: none;"
          aria-hidden="true"></div>
@@ -86,16 +87,6 @@
            class="fixed inset-y-0 right-0 z-[120] flex h-[100dvh] w-[min(88vw,390px)] flex-col overflow-y-auto border-l border-gray-200 bg-white px-6 pb-8 pt-24 shadow-2xl overscroll-contain lg:hidden"
            style="display: none;"
            aria-label="Mobile navigation">
-        <div class="sticky top-0 z-[10] flex shrink-0 justify-end bg-white pb-4">
-            <button type="button"
-                    @click.stop="mobileOpen = false"
-                    class="flex h-11 w-11 items-center justify-center rounded-md border border-gray-200 bg-white text-navy-950 shadow-sm transition-colors duration-200 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
-                    aria-label="Close navigation menu">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-            </button>
-        </div>
         <div class="mb-6 shrink-0">
             <p class="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Navigation</p>
             <p class="mt-2 max-w-xs text-sm leading-6 text-ink/65">Explore our SAP services, solutions and expertise.</p>
