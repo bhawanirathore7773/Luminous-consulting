@@ -1,0 +1,28 @@
+{% load ui_tags %}
+<section class="border-b border-gray-200 bg-white" x-data="{ selected: null }">
+    <div class="mx-auto max-w-4xl px-6 py-20 text-center">
+        <h2 class="text-3xl font-semibold tracking-tight text-navy-950">SAP complexity shouldn't slow your business down.</h2>
+        <p class="mt-4 text-ink/70">What are you trying to solve?</p>
+
+        <div class="mt-8 flex flex-wrap justify-center gap-3">
+            {% for option in problem_options %}
+                <button type="button"
+                        @click="selected = {{ forloop.counter0 }}"
+                        :class="selected === {{ forloop.counter0 }} ? 'border-accent bg-accent text-white' : 'border-gray-200 text-ink hover:border-navy-800/30'"
+                        class="rounded-md border px-4 py-2 text-sm font-medium transition-colors">
+                    {{ option.problem }}
+                </button>
+            {% endfor %}
+        </div>
+
+        <div class="mt-8 min-h-[4.5rem]">
+            {% for option in problem_options %}
+                <div x-show="selected === {{ forloop.counter0 }}" x-transition style="display: none;"
+                     class="mx-auto flex max-w-md flex-col items-center gap-3 rounded-md border border-gray-200 bg-gray-50 px-6 py-5 sm:flex-row sm:justify-between">
+                    <p class="text-sm text-ink">Recommended: <span class="font-semibold text-navy-950">{{ option.service }}</span></p>
+                    {% button "View details" option.url "tertiary" %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

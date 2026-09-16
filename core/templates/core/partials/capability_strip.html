@@ -1,0 +1,10 @@
+<section class="border-b border-gray-200 bg-gray-50">
+    <div class="mx-auto max-w-7xl px-6 py-8">
+        <p class="text-sm text-ink/60">Capabilities across the SAP lifecycle</p>
+        <ul class="mt-4 flex flex-wrap gap-x-8 gap-y-3">
+            {% for capability in capabilities %}
+                <li class="text-sm font-medium text-navy-950">{{ capability }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>

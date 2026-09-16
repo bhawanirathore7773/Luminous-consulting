@@ -1,0 +1,35 @@
+{% load ui_tags %}
+<section class="border-b border-gray-200 bg-white">
+    <div class="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:grid-cols-2 md:py-28">
+        <div>
+            <h1 class="max-w-lg text-4xl font-semibold leading-tight tracking-tight text-navy-950 md:text-5xl">
+                Transform SAP complexity into business advantage.
+            </h1>
+            <p class="mt-6 max-w-md text-lg leading-relaxed text-ink/80">
+                From SAP consulting and S/4HANA transformation to integration, development and managed services, we help enterprises modernize, optimize and operate their SAP landscape with confidence.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-4">
+                {% button "Talk to an SAP Expert" "/contact/" "primary" %}
+                {% button "Explore SAP services" "/services/" "secondary" %}
+            </div>
+        </div>
+
+        <div class="mx-auto w-full max-w-xs" aria-hidden="true">
+            <svg viewBox="0 0 300 468" class="h-auto w-full" role="img" aria-label="SAP landscape stack: business processes, SAP core, S/4HANA, SAP BTP, integration, data and analytics, and automation.">
+                {% comment %} Layer order top-to-bottom mirrors the flow described in the hero copy: process → core → transformation → platform → connectivity → insight → automation. {% endcomment %}
+                <line x1="150" y1="8" x2="150" y2="460" stroke="#E2E6EB" stroke-width="2"/>
+
+                {% for layer in hero_stack %}
+                    <rect x="20" y="{{ layer.y }}" width="260" height="44" rx="4"
+                          style="fill:{{ layer.fill }}; stroke:{{ layer.stroke }};" stroke-width="1"/>
+                    <text x="150" y="{{ layer.text_y }}" text-anchor="middle"
+                          style="fill:{{ layer.text_color }}; font-family:Inter,sans-serif; font-size:13px; font-weight:500;">
+                        {{ layer.label }}
+                    </text>
+                {% endfor %}
+
+                <circle cx="150" cy="30" r="4" style="fill:rgb(var(--color-accent));" class="flow-pulse"/>
+            </svg>
+        </div>
+    </div>
+</section>

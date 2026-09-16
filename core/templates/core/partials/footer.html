@@ -1,0 +1,27 @@
+<footer class="border-t border-gray-200 bg-navy-950 text-white">
+    <div class="mx-auto max-w-7xl px-6 py-16">
+        <div class="grid grid-cols-2 gap-10 md:grid-cols-5">
+            <div class="col-span-2 md:col-span-1">
+                <p class="text-lg font-semibold tracking-tight">{{ site_name }}</p>
+                <p class="mt-3 max-w-xs text-sm text-white/60">
+                    SAP consulting, transformation, integration and managed services for enterprise SAP landscapes.
+                </p>
+            </div>
+            {% for column in footer_columns %}
+                <div>
+                    <p class="text-sm font-semibold text-white/90">{{ column.heading }}</p>
+                    <ul class="mt-4 space-y-2.5">
+                        {% for link in column.links %}
+                            <li><a href="{{ link.url }}" class="text-sm text-white/60 hover:text-white">{{ link.label }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-14 flex flex-col gap-4 border-t border-white/10 pt-8 text-sm text-white/50 md:flex-row md:items-center md:justify-between">
+            <p>&copy; {% now "Y" %} {{ site_name }}. All rights reserved.</p>
+            <p>Contact details pending — add a business email and phone once confirmed.</p>
+        </div>
+    </div>
+</footer>

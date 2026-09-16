@@ -1,0 +1,59 @@
+{% load ui_tags %}
+<header x-data="{ mobileOpen: false, openMenu: null }" @keydown.escape.window="openMenu = null; mobileOpen = false" class="sticky top-0 z-40 border-b border-gray-200 bg-white/95 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <a href="{% url 'core:home' %}" class="text-lg font-semibold tracking-tight text-navy-950">
+            {{ site_name }}
+        </a>
+
+        <nav class="hidden items-center gap-1 lg:flex" aria-label="Primary">
+            {% for item in primary_nav %}
+                {% if item.megamenu %}
+                    <div class="relative" @mouseenter="openMenu = '{{ item.megamenu }}'" @mouseleave="openMenu = null">
+                        <button type="button"
+                                class="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-ink hover:text-accent"
+                                @click="openMenu = (openMenu === '{{ item.megamenu }}') ? null : '{{ item.megamenu }}'"
+                                :aria-expanded="openMenu === '{{ item.megamenu }}'">
+                            {{ item.label }}
+                            <svg width="10" height="6" viewBox="0 0 10 6" fill="none" aria-hidden="true"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                        </button>
+                        <div x-show="openMenu === '{{ item.megamenu }}'"
+                             x-transition:enter="transition ease-out duration-100"
+                             x-transition:enter-start="opacity-0"
+                             x-transition:enter-end="opacity-100"
+                             class="absolute left-0 top-full grid w-64 gap-0.5 rounded-md border border-gray-200 bg-white p-2 shadow-sm"
+                             style="display: none;">
+                            {% with entries=mega_menus|get_item:item.megamenu %}
+                                {% for entry in entries %}
+                                    <a href="{{ entry.url }}" class="rounded px-3 py-2 text-sm text-ink hover:bg-gray-50 hover:text-accent">{{ entry.label }}</a>
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                    </div>
+                {% else %}
+                    <a href="{{ item.url }}" class="rounded-md px-3 py-2 text-sm font-medium text-ink hover:text-accent">{{ item.label }}</a>
+                {% endif %}
+            {% endfor %}
+        </nav>
+
+        <div class="hidden lg:block">
+            {% button primary_cta.label primary_cta.url "primary" %}
+        </div>
+
+        <button type="button" class="lg:hidden" @click="mobileOpen = !mobileOpen" :aria-expanded="mobileOpen" aria-label="Toggle menu">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 6H20M4 12H20M4 18H20" stroke="#1A2332" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+        </button>
+    </div>
+
+    <div x-show="mobileOpen" x-transition class="border-t border-gray-200 bg-white lg:hidden" style="display: none;">
+        <nav class="flex flex-col gap-1 px-6 py-4" aria-label="Primary mobile">
+            {% for item in primary_nav %}
+                <a href="{{ item.url }}" class="rounded-md px-2 py-3 text-sm font-medium text-ink hover:text-accent">{{ item.label }}</a>
+            {% endfor %}
+            <div class="mt-2">
+                {% button primary_cta.label primary_cta.url "primary" %}
+            </div>
+        </nav>
+    </div>
+</header>
