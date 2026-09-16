@@ -2,9 +2,8 @@
 <header x-data="{ mobileOpen: false, openMenu: null }"
         x-init="$watch('mobileOpen', value => document.body.classList.toggle('overflow-hidden', value))"
         @keydown.escape.window="mobileOpen = false; openMenu = null"
-        @click="if (mobileOpen && !$event.target.closest('[data-mobile-trigger]') && !$event.target.closest('#mobile-navigation')) mobileOpen = false"
-        class="sticky top-0 z-[100] border-b border-gray-200 bg-white/95">
-    <div class="mx-auto flex h-[88px] max-w-7xl items-center justify-between px-5 sm:px-6">
+        class="sticky top-0 z-[100] border-b border-gray-200 bg-white/95 backdrop-blur">
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6">
         <a href="{% url 'core:home' %}" class="text-lg font-semibold tracking-tight text-navy-950 sm:text-xl">
             {{ site_name }}
         </a>
@@ -14,7 +13,7 @@
                 {% if item.megamenu %}
                     <div class="relative" @mouseenter="openMenu = '{{ item.megamenu }}'" @mouseleave="openMenu = null">
                         <button type="button"
-                                class="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-ink transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                                class="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-ink transition-colors hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40"
                                 @click="openMenu = (openMenu === '{{ item.megamenu }}') ? null : '{{ item.megamenu }}'"
                                 :aria-expanded="openMenu === '{{ item.megamenu }}'">
                             {{ item.label }}
@@ -28,13 +27,13 @@
                              style="display: none;">
                             {% with entries=mega_menus|get_item:item.megamenu %}
                                 {% for entry in entries %}
-                                    <a href="{{ entry.url }}" class="rounded px-3 py-2 text-sm text-ink transition-colors hover:bg-gray-50 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-accent">{{ entry.label }}</a>
+                                    <a href="{{ entry.url }}" class="rounded px-3 py-2 text-sm text-ink transition-colors hover:bg-gray-50 hover:text-accent focus:bg-gray-50 focus:text-accent focus:outline-none">{{ entry.label }}</a>
                                 {% endfor %}
                             {% endwith %}
                         </div>
                     </div>
                 {% else %}
-                    <a href="{{ item.url }}" class="rounded-md px-3 py-2 text-sm font-medium text-ink transition-colors hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">{{ item.label }}</a>
+                    <a href="{{ item.url }}" class="rounded-md px-3 py-2 text-sm font-medium text-ink transition-colors hover:text-accent focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40">{{ item.label }}</a>
                 {% endif %}
             {% endfor %}
         </nav>
@@ -43,20 +42,22 @@
             {% button primary_cta.label primary_cta.url "primary" %}
         </div>
 
+        <!-- The trigger stays at the same visual position. When open it becomes
+             fixed to the viewport so the X remains available while the drawer scrolls. -->
         <button type="button"
-                data-mobile-trigger
-                class="relative z-[130] flex h-12 w-12 shrink-0 items-center justify-center rounded-md text-navy-950 transition-colors hover:bg-gray-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent lg:hidden"
+                class="relative z-[130] flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-navy-950 transition-all duration-200 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 lg:hidden"
+                :class="mobileOpen ? 'fixed right-5 top-4 bg-white shadow-sm ring-1 ring-gray-200' : ''"
                 @click.stop="mobileOpen = !mobileOpen"
                 :aria-expanded="mobileOpen"
                 aria-controls="mobile-navigation"
                 :aria-label="mobileOpen ? 'Close navigation menu' : 'Open navigation menu'">
-            <span class="sr-only" x-text="mobileOpen ? 'Close menu' : 'Open menu'">Open menu</span>
-            <span class="relative block h-7 w-7" aria-hidden="true">
-                <span class="absolute left-1/2 top-[7px] block h-0.5 w-6 -translate-x-1/2 rounded bg-current transition-all duration-200"
+            <span class="sr-only" x-text="mobileOpen ? 'Close menu' : 'Open menu'">Menu</span>
+            <span class="relative block h-6 w-6" aria-hidden="true">
+                <span class="absolute left-1/2 top-[7px] block h-0.5 w-5 -translate-x-1/2 rounded bg-current transition-all duration-200"
                       :class="mobileOpen ? 'top-1/2 rotate-45' : ''"></span>
-                <span class="absolute left-1/2 top-1/2 block h-0.5 w-6 -translate-x-1/2 -translate-y-1/2 rounded bg-current transition-all duration-200"
+                <span class="absolute left-1/2 top-1/2 block h-0.5 w-5 -translate-x-1/2 -translate-y-1/2 rounded bg-current transition-all duration-200"
                       :class="mobileOpen ? 'scale-x-0 opacity-0' : ''"></span>
-                <span class="absolute left-1/2 bottom-[7px] block h-0.5 w-6 -translate-x-1/2 rounded bg-current transition-all duration-200"
+                <span class="absolute left-1/2 bottom-[7px] block h-0.5 w-5 -translate-x-1/2 rounded bg-current transition-all duration-200"
                       :class="mobileOpen ? 'top-1/2 -translate-y-1/2 -rotate-45' : ''"></span>
             </span>
         </button>
@@ -79,29 +80,32 @@
            x-transition:enter="transform transition ease-out duration-300"
            x-transition:enter-start="translate-x-full"
            x-transition:enter-end="translate-x-0"
-           x-transition:leave="transform transition ease-in duration-200"
+           x-transition:leave="transform transition ease-in duration-250"
            x-transition:leave-start="translate-x-0"
            x-transition:leave-end="translate-x-full"
            @click.stop
-           class="fixed inset-y-0 right-0 z-[120] flex h-dvh w-[min(88vw,390px)] flex-col overflow-y-auto border-l border-gray-200 bg-white px-6 pb-8 pt-[112px] shadow-2xl lg:hidden"
+           class="fixed inset-y-0 right-0 z-[120] flex h-[100dvh] w-[min(88vw,390px)] flex-col overflow-y-auto border-l border-gray-200 bg-white px-6 pb-8 pt-24 shadow-2xl overscroll-contain lg:hidden"
            style="display: none;"
            aria-label="Mobile navigation">
-        <div class="mb-8">
+        <div class="mb-6 shrink-0">
             <p class="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Navigation</p>
-            <p class="mt-2 text-sm leading-6 text-ink/65">Explore our SAP services, solutions and expertise.</p>
+            <p class="mt-2 max-w-xs text-sm leading-6 text-ink/65">Explore our SAP services, solutions and expertise.</p>
         </div>
 
         <nav class="flex flex-col" aria-label="Mobile primary">
             {% for item in primary_nav %}
                 <a href="{{ item.url }}"
                    @click="mobileOpen = false"
-                   class="border-b border-gray-200 py-4 text-base font-medium text-navy-950 transition-colors focus-visible:bg-gray-50 focus-visible:text-accent">
-                    {{ item.label }}
+                   class="group border-b border-gray-200 py-4 text-base font-medium text-navy-950 transition-colors duration-200 hover:border-accent/30 hover:text-accent focus:bg-gray-50 focus:text-accent focus:outline-none">
+                    <span class="inline-flex items-center gap-2">
+                        {{ item.label }}
+                        <span class="translate-x-0 opacity-0 transition-all duration-200 group-hover:translate-x-1 group-hover:opacity-100" aria-hidden="true">→</span>
+                    </span>
                 </a>
             {% endfor %}
         </nav>
 
-        <div class="mt-auto pt-8">
+        <div class="mt-auto shrink-0 pt-8">
             {% button primary_cta.label primary_cta.url "primary" %}
         </div>
     </aside>
