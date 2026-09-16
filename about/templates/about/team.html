@@ -1,0 +1,47 @@
+{% extends "core/base.html" %}
+
+{% block title %}Our team — {{ site_name }}{% endblock %}
+{% block meta_description %}The expertise areas our SAP practice is organized around.{% endblock %}
+
+{% block content %}
+<section class="border-b border-gray-200 bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-16 text-center">
+        <h1 class="text-4xl font-semibold tracking-tight text-navy-950">Our team</h1>
+        <p class="mt-4 text-lg leading-relaxed text-ink/70">Our practice is organized around the following areas of SAP expertise.</p>
+    </div>
+</section>
+
+{% if has_team_members %}
+    {% for group in team_categories %}
+        <section class="{% cycle 'bg-white' 'bg-gray-50' %}">
+            <div class="mx-auto max-w-5xl px-6 py-14">
+                <h2 class="text-2xl font-semibold tracking-tight text-navy-950">{{ group.label }}</h2>
+                <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {% for member in group.members %}
+                        <div class="rounded-md border border-gray-200 p-5">
+                            <p class="font-medium text-navy-950">{{ member.name }}</p>
+                            <p class="text-sm text-ink/60">{{ member.role }}</p>
+                            {% if member.expertise %}<p class="mt-2 text-sm text-ink/70">{{ member.expertise }}</p>{% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+    {% endfor %}
+{% else %}
+    <section class="bg-white">
+        <div class="mx-auto max-w-4xl px-6 py-16">
+            <div class="rounded-md border border-dashed border-gray-300 px-6 py-10 text-center">
+                <p class="text-ink/60">Individual team profiles are being added. In the meantime, here's how the practice is organized:</p>
+            </div>
+            <div class="mt-8 flex flex-wrap justify-center gap-3">
+                {% for value, label in category_choices %}
+                    <span class="rounded-md border border-gray-200 px-4 py-2 text-sm font-medium text-ink">{{ label }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endif %}
+
+{% include "core/partials/final_cta.html" %}
+{% endblock %}

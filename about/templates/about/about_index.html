@@ -1,0 +1,150 @@
+{% extends "core/base.html" %}
+{% load ui_tags %}
+
+{% block title %}About — {{ site_name }}{% endblock %}
+{% block meta_description %}Why this practice exists, how it works, and what it believes about SAP consulting.{% endblock %}
+
+{% block content %}
+<section class="border-b border-gray-200 bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-16 text-center">
+        <h1 class="text-4xl font-semibold tracking-tight text-navy-950">Who we are</h1>
+        <p class="mt-4 text-lg leading-relaxed text-ink/70">
+            We started from a specific frustration: SAP engagements that either had deep technical skill with no
+            business judgment, or strong business consulting with no ability to actually configure and build the
+            system. This practice exists to close that gap — functional and technical depth under one roof,
+            accountable to the same outcome.
+        </p>
+    </div>
+</section>
+
+<section class="bg-gray-50">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+        <h2 class="text-2xl font-semibold tracking-tight text-navy-950">Our philosophy</h2>
+        <p class="mt-4 leading-relaxed text-ink/80">
+            SAP engagements go wrong more often from unclear ownership than from any single technical mistake —
+            a custom object no one will retire, an integration no one monitors, a role conflict no one reviews.
+            We treat clarity of ownership as part of the deliverable, not an assumption someone else will handle.
+        </p>
+        <p class="mt-4 leading-relaxed text-ink/80">
+            We'd rather scope something narrow and finish it than propose something broad and stall. That shapes
+            how we approach everything from a single ABAP fix to a multi-year transformation program.
+        </p>
+    </div>
+</section>
+
+<section class="bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+        <h2 class="text-2xl font-semibold tracking-tight text-navy-950">How we work</h2>
+        <p class="mt-4 leading-relaxed text-ink/80">
+            Every engagement follows the same six-stage approach — discover, assess, design, deliver, stabilize,
+            optimize — regardless of size. Small engagements move through it quickly; large ones spend more time
+            in each stage, but the stages don't change.
+        </p>
+        <div class="mt-4">
+            {% button "See our full approach" "/approach/" "tertiary" %}
+        </div>
+    </div>
+</section>
+
+<section class="bg-gray-50">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+        <h2 class="text-2xl font-semibold tracking-tight text-navy-950">Delivery model</h2>
+        <p class="mt-4 leading-relaxed text-ink/80">We work in whichever model fits the situation, not a single default:</p>
+        <ul class="mt-5 space-y-3">
+            {% for item in delivery_models %}
+                <li class="flex gap-3 text-ink/80">
+                    <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"></span>
+                    <span><span class="font-medium text-navy-950">{{ item.name }}</span> — {{ item.description }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+
+<section class="bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+        <h2 class="text-2xl font-semibold tracking-tight text-navy-950">SAP expertise</h2>
+        <p class="mt-4 leading-relaxed text-ink/80">
+            Our platform, technology, and functional coverage is listed in full — we only claim what our services
+            and industry work actually back up.
+        </p>
+        <div class="mt-4">
+            {% button "View our SAP expertise" "/sap-expertise/" "tertiary" %}
+        </div>
+    </div>
+</section>
+
+<section class="bg-gray-50">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+        <h2 class="text-2xl font-semibold tracking-tight text-navy-950">Quality</h2>
+        <p class="mt-4 leading-relaxed text-ink/80">
+            Quality shows up in how work gets reviewed, not in a statement about caring how work gets reviewed.
+            Configuration and code changes go through peer review before testing, test coverage is scoped against
+            actual business processes rather than a generic checklist, and cutover plans are rehearsed before
+            they're run for real.
+        </p>
+    </div>
+</section>
+
+<section class="bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+        <h2 class="text-2xl font-semibold tracking-tight text-navy-950">Security</h2>
+        <p class="mt-4 leading-relaxed text-ink/80">
+            We work under the principle of least privilege — access to a client's systems is scoped to what a
+            given engagement actually requires, time-limited where possible, and removed at the end of the
+            engagement rather than left open. Client data and credentials are never used or stored outside the
+            scope of the engagement they relate to.
+        </p>
+    </div>
+</section>
+
+<section class="bg-gray-50">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+        <h2 class="text-2xl font-semibold tracking-tight text-navy-950">Values</h2>
+        <ul class="mt-4 flex flex-wrap gap-3">
+            {% for value in values %}
+                <li class="rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-ink">{{ value }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+
+<section class="bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+        <h2 class="text-2xl font-semibold tracking-tight text-navy-950">Leadership &amp; team</h2>
+        <p class="mt-4 leading-relaxed text-ink/80">
+            Our consultants are organized by the SAP expertise areas listed on the team page — architects,
+            functional and technical consultants, integration specialists, and more. Individual profiles are
+            published there as they're added.
+        </p>
+        <div class="mt-4">
+            {% button "Meet the team" "/about/team/" "tertiary" %}
+        </div>
+    </div>
+</section>
+
+<section class="bg-gray-50">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+        <h2 class="text-2xl font-semibold tracking-tight text-navy-950">Locations</h2>
+        <p class="mt-4 leading-relaxed text-ink/80">
+            Engagement locations — on-site, remote, or hybrid — are confirmed per engagement rather than fixed to
+            specific offices. <span class="text-ink/50">(Specific office locations: to be added once confirmed.)</span>
+        </p>
+    </div>
+</section>
+
+<section class="bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-14">
+        <h2 class="text-2xl font-semibold tracking-tight text-navy-950">Careers</h2>
+        <p class="mt-4 leading-relaxed text-ink/80">
+            We're not currently listing specific open roles, but we're always interested in hearing from
+            experienced SAP professionals.
+        </p>
+        <div class="mt-4">
+            {% button "See careers" "/careers/" "tertiary" %}
+        </div>
+    </div>
+</section>
+
+{% include "core/partials/final_cta.html" %}
+{% endblock %}

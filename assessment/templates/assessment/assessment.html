@@ -1,1 +1,236 @@
+{% extends "core/base.html" %}
+{% load ui_tags %}
 
+{% block title %}How healthy is your SAP landscape? — {{ site_name }}{% endblock %}
+{% block meta_description %}A 6-question self-assessment of your SAP landscape — current situation, areas of attention, and where to focus first.{% endblock %}
+
+{% block content %}
+<section class="bg-white" x-data="assessmentWizard()">
+    <div class="mx-auto max-w-2xl px-6 py-16">
+        <div class="text-center">
+            <h1 class="text-4xl font-semibold tracking-tight text-navy-950">How healthy is your SAP landscape?</h1>
+            <p class="mt-4 text-lg leading-relaxed text-ink/70">Six quick questions — a starting point for a conversation, not a substitute for a full landscape assessment.</p>
+        </div>
+
+        <div class="mt-10">
+            <template x-if="!isSummary">
+                <div>
+                    <p class="text-sm font-medium text-ink/50" x-text="'Step ' + step + ' of ' + totalSteps"></p>
+                    <h2 class="mt-2 text-2xl font-semibold tracking-tight text-navy-950" x-text="stepTitles[currentKey]"></h2>
+
+                    <div class="mt-6 flex flex-col gap-3">
+                        <template x-for="option in options[currentKey]" :key="option.value">
+                            <button type="button"
+                                    @click="select(currentKey, option.value)"
+                                    :class="answers[currentKey] === option.value ? 'border-accent bg-accent text-white' : 'border-gray-200 text-ink hover:border-navy-800/30'"
+                                    class="rounded-md border px-4 py-3 text-left text-sm font-medium transition-colors"
+                                    x-text="option.label">
+                            </button>
+                        </template>
+                    </div>
+
+                    <div class="mt-8 flex items-center justify-between">
+                        <button type="button" @click="back()" x-show="step > 1"
+                                class="text-sm font-medium text-ink/60 hover:text-accent">
+                            Back
+                        </button>
+                        <span x-show="step === 1"></span>
+                        <button type="button" @click="next()" :disabled="!canAdvance"
+                                :class="canAdvance ? 'bg-accent hover:bg-accent-dark' : 'cursor-not-allowed bg-gray-200'"
+                                class="rounded-md px-5 py-2.5 text-sm font-medium text-white transition-colors"
+                                x-text="step === totalSteps ? 'See my results' : 'Next'">
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            <template x-if="isSummary">
+                <div>
+                    <h2 class="text-2xl font-semibold tracking-tight text-navy-950">Your results</h2>
+                    <p class="mt-2 text-sm text-ink/50">This is a directional summary based on six answers, not an authoritative SAP audit.</p>
+
+                    <div class="mt-6 space-y-6">
+                        <div class="rounded-md border border-gray-200 p-5">
+                            <p class="text-sm font-semibold text-accent">Current situation</p>
+                            <p class="mt-2 text-sm leading-relaxed text-ink/80" x-text="summary.currentSituation"></p>
+                        </div>
+                        <div class="rounded-md border border-gray-200 p-5">
+                            <p class="text-sm font-semibold text-accent">Potential areas of attention</p>
+                            <ul class="mt-2 space-y-2">
+                                <template x-for="item in summary.attention" :key="item">
+                                    <li class="flex gap-2 text-sm leading-relaxed text-ink/80">
+                                        <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"></span>
+                                        <span x-text="item"></span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                        <div class="rounded-md border border-gray-200 p-5">
+                            <p class="text-sm font-semibold text-accent">Recommended service categories</p>
+                            <ul class="mt-2 space-y-2">
+                                <template x-for="item in summary.recommended" :key="item">
+                                    <li class="flex gap-2 text-sm leading-relaxed text-ink/80">
+                                        <span class="mt-2 h-1.5 w-1.5 flex-none rounded-full bg-accent"></span>
+                                        <span x-text="item"></span>
+                                    </li>
+                                </template>
+                            </ul>
+                        </div>
+                        <div class="rounded-md border border-gray-200 p-5">
+                            <p class="text-sm font-semibold text-accent">Suggested next discussion</p>
+                            <p class="mt-2 text-sm leading-relaxed text-ink/80">A short conversation to validate these areas against your actual landscape and prioritize what to tackle first.</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 flex flex-wrap gap-4">
+                        <a :href="contactUrl()" class="inline-flex items-center justify-center rounded-md bg-accent px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-accent-dark">
+                            Discuss Your Assessment With an SAP Expert
+                        </a>
+                        <button type="button" @click="restart()" class="text-sm font-medium text-ink/60 hover:text-accent">Start over</button>
+                    </div>
+                </div>
+            </template>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function buildAssessmentSummary(answers) {
+    const scores = {};
+    const addScore = (category, points) => { scores[category] = (scores[category] || 0) + points; };
+
+    const challengeMap = {
+        modernize: 'sap-consulting',
+        s4hana_migration: 'sap-s4hana',
+        integrate: 'sap-integration',
+        reporting: 'sap-data-analytics',
+        security: 'sap-security',
+        support: 'sap-ams',
+    };
+    if (answers.challenge && challengeMap[answers.challenge]) {
+        addScore(challengeMap[answers.challenge], 3);
+    }
+    if (answers.platform === 'ecc') addScore('sap-s4hana', 2);
+    if (answers.complexity === 'high') addScore('sap-consulting', 2);
+    if (answers.integration === 'many_unmonitored') addScore('sap-integration', 2);
+    if (answers.integration === 'minimal' || answers.integration === 'some') addScore('sap-integration', 1);
+    if (answers.support === 'none' || answers.support === 'stretched') addScore('sap-ams', 2);
+    if (answers.timeline === 'exploring') addScore('sap-consulting', 1);
+
+    const labels = {
+        'sap-consulting': 'SAP Consulting',
+        'sap-s4hana': 'SAP S/4HANA',
+        'sap-integration': 'SAP Integration',
+        'sap-security': 'SAP Security',
+        'sap-data-analytics': 'SAP Data, Analytics & AI',
+        'sap-ams': 'SAP AMS & Support',
+    };
+
+    const ranked = Object.entries(scores).sort((a, b) => b[1] - a[1]).map(([key]) => key);
+    const recommendedKeys = ranked.length ? ranked.slice(0, 2) : ['sap-consulting'];
+    const recommended = recommendedKeys.map((k) => labels[k]);
+
+    const attention = [];
+    if (answers.integration === 'many_unmonitored') {
+        attention.push('Multiple integrations with no central monitoring — failures may be going unnoticed');
+    }
+    if (answers.platform === 'ecc' && (answers.timeline === 'exploring' || answers.timeline === 'eighteen_plus')) {
+        attention.push("Still on ECC with no near-term S/4HANA timeline — worth revisiting given SAP's mainstream maintenance timelines");
+    }
+    if (answers.support === 'none' || answers.support === 'stretched') {
+        attention.push('Limited internal support capacity relative to landscape complexity');
+    }
+    if (answers.complexity === 'high' && answers.integration !== 'governed') {
+        attention.push('High customization combined with an ungoverned integration landscape increases change risk');
+    }
+    if (!attention.length) {
+        attention.push('No major red flags surfaced by these answers alone — a deeper landscape assessment would confirm this.');
+    }
+
+    const platformLabels = { ecc: 'SAP ECC', s4hana: 'S/4HANA', cloud_erp: 'SAP Cloud ERP', not_yet: 'not yet on SAP' };
+    const currentSituation = 'Running ' + (platformLabels[answers.platform] || 'an unspecified SAP platform')
+        + ', ' + (answers.complexity || 'unspecified') + ' complexity.';
+
+    return { currentSituation, attention, recommended };
+}
+
+function assessmentWizard() {
+    return {
+        step: 1,
+        totalSteps: 6,
+        answers: { platform: null, challenge: null, complexity: null, integration: null, support: null, timeline: null },
+        stepKeys: ['platform', 'challenge', 'complexity', 'integration', 'support', 'timeline'],
+        stepTitles: {
+            platform: 'Current SAP platform',
+            challenge: 'Business challenge',
+            complexity: 'System complexity',
+            integration: 'Integration landscape',
+            support: 'Support model',
+            timeline: 'Transformation timeline',
+        },
+        options: {
+            platform: [
+                { value: 'ecc', label: 'SAP ECC (on-premise)' },
+                { value: 's4hana', label: 'S/4HANA' },
+                { value: 'cloud_erp', label: 'SAP Cloud ERP / public cloud' },
+                { value: 'not_yet', label: 'Not yet on SAP / evaluating' },
+            ],
+            challenge: [
+                { value: 'modernize', label: 'Modernize or upgrade' },
+                { value: 's4hana_migration', label: 'Migrate to S/4HANA' },
+                { value: 'integrate', label: 'Integrate systems' },
+                { value: 'reporting', label: 'Improve reporting & data' },
+                { value: 'security', label: 'Strengthen security' },
+                { value: 'support', label: 'Reduce support burden' },
+            ],
+            complexity: [
+                { value: 'low', label: 'Low — mostly standard, little customization' },
+                { value: 'moderate', label: 'Moderate — some customization, a few integrations' },
+                { value: 'high', label: 'High — heavy customization, many integrations' },
+            ],
+            integration: [
+                { value: 'minimal', label: 'Minimal — SAP mostly standalone' },
+                { value: 'some', label: 'Some point-to-point integrations' },
+                { value: 'many_unmonitored', label: 'Many integrations, no central monitoring' },
+                { value: 'governed', label: 'Well-governed integration platform already in place' },
+            ],
+            support: [
+                { value: 'none', label: 'No formal SAP support team' },
+                { value: 'stretched', label: 'Small internal team, stretched thin' },
+                { value: 'dedicated', label: 'Dedicated internal team' },
+                { value: 'outsourced', label: 'Outsourced / AMS provider already' },
+            ],
+            timeline: [
+                { value: 'exploring', label: 'No specific timeline / exploring' },
+                { value: 'six_months', label: 'Within the next 6 months' },
+                { value: 'six_eighteen', label: '6–18 months' },
+                { value: 'eighteen_plus', label: 'More than 18 months out' },
+            ],
+        },
+        get currentKey() { return this.stepKeys[this.step - 1]; },
+        get canAdvance() { return !!this.answers[this.currentKey]; },
+        get isSummary() { return this.step > this.totalSteps; },
+        get summary() { return buildAssessmentSummary(this.answers); },
+        select(key, value) { this.answers[key] = value; },
+        next() { this.step = this.step < this.totalSteps ? this.step + 1 : this.totalSteps + 1; },
+        back() { if (this.step > 1) this.step--; },
+        restart() {
+            this.step = 1;
+            this.answers = { platform: null, challenge: null, complexity: null, integration: null, support: null, timeline: null };
+        },
+        summaryText() {
+            const s = this.summary;
+            return 'Current situation: ' + s.currentSituation
+                + ' Potential areas of attention: ' + s.attention.join('; ') + '.'
+                + ' Recommended service categories: ' + s.recommended.join(', ') + '.';
+        },
+        contactUrl() {
+            const params = new URLSearchParams({ source: 'assessment', summary: this.summaryText() });
+            return '/contact/?' + params.toString();
+        },
+    };
+}
+</script>
+{% endblock %}

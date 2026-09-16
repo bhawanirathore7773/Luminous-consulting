@@ -1,0 +1,34 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ case_study.display_meta_title }} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ case_study.display_meta_description }}{% endblock %}
+
+{% block content %}
+<section class="border-b border-gray-200 bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-16 text-center">
+        <p class="text-sm font-semibold text-accent">Representative SAP use case — not a specific client disclosure</p>
+        <h1 class="mt-3 text-4xl font-semibold tracking-tight text-navy-950">{{ case_study.title }}</h1>
+        <p class="mt-4 text-ink/70">
+            {% if case_study.industry %}Industry: {{ case_study.industry.name }} &middot; {% endif %}SAP environment: {{ case_study.sap_environment }}
+        </p>
+    </div>
+</section>
+
+{% include "core/partials/text_section.html" with heading="Business challenge" body=case_study.business_challenge %}
+
+{% include "core/partials/text_section.html" with heading="Objective" body=case_study.objective bg="gray" %}
+
+{% include "core/partials/text_section.html" with heading="Approach" body=case_study.approach %}
+
+{% include "core/partials/text_section.html" with heading="Solution" body=case_study.solution bg="gray" %}
+
+{% include "core/partials/text_section.html" with heading="Technology used" body=case_study.technology_used %}
+
+{% if related_services %}
+    {% include "core/partials/related_grid.html" with heading="Services involved" items=related_services %}
+{% endif %}
+
+{% include "core/partials/text_section.html" with heading="Outcome" body=case_study.outcome %}
+
+{% include "core/partials/final_cta.html" with cta_subtext=detail_cta_subtext %}
+{% endblock %}

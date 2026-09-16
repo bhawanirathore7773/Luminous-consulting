@@ -1,0 +1,21 @@
+{% extends "core/base.html" %}
+{% load ui_tags %}
+
+{% block title %}Careers — {{ site_name }}{% endblock %}
+{% block meta_description %}Interested in SAP consulting work with this practice? Here's how to reach out.{% endblock %}
+
+{% block content %}
+<section class="bg-white">
+    <div class="mx-auto max-w-2xl px-6 py-20 text-center">
+        <h1 class="text-4xl font-semibold tracking-tight text-navy-950">Careers</h1>
+        <p class="mt-4 text-lg leading-relaxed text-ink/70">
+            We're not currently listing specific open roles here. If you're an experienced SAP professional —
+            functional, technical, integration, BTP, data, or delivery — and the kind of work described
+            throughout this site sounds like a fit, we'd like to hear from you.
+        </p>
+        <div class="mt-8">
+            {% button "Get in touch" "/contact/" "primary" %}
+        </div>
+    </div>
+</section>
+{% endblock %}
