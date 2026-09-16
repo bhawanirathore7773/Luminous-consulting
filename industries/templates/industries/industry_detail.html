@@ -1,0 +1,38 @@
+{% extends "core/base.html" %}
+
+{% block title %}SAP for {{ industry.name }} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ industry.display_meta_description }}{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">{{ industry_schema_json }}</script>
+{% endblock %}
+
+{% block content %}
+    {% include "core/partials/detail_hero.html" with title=hero_title subtitle=industry.hero_intro cta_label=industry.cta_label cta_url="/contact/" %}
+
+    {% include "core/partials/list_section.html" with heading="Industry challenges" items=industry.challenges %}
+
+    {% include "core/partials/list_section.html" with heading="Business processes" items=industry.business_processes bg="gray" %}
+
+    {% include "core/partials/text_section.html" with heading="SAP landscape" body=industry.sap_landscape %}
+
+    {% include "core/partials/list_section.html" with heading="Relevant SAP modules" items=industry.relevant_modules bg="gray" %}
+
+    {% include "core/partials/list_section.html" with heading="Integration requirements" items=industry.integration_requirements %}
+
+    {% include "core/partials/list_section.html" with heading="Transformation opportunities" items=industry.transformation_opportunities bg="gray" %}
+
+    {% include "core/partials/list_section.html" with heading="Typical use cases" items=industry.typical_use_cases %}
+
+    {% if related_services %}
+        {% include "core/partials/related_grid.html" with heading="Relevant services" items=related_services %}
+    {% endif %}
+
+    {% include "core/partials/text_section.html" with heading="Outcomes" body=industry.outcomes %}
+
+    {% if industry.faqs.all %}
+        {% include "core/partials/faq_section.html" with faqs=industry.faqs.all %}
+    {% endif %}
+
+    {% include "core/partials/final_cta.html" with cta_subtext=detail_cta_subtext cta_label=industry.cta_label cta_url="/contact/" %}
+{% endblock %}
