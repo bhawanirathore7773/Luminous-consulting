@@ -1,7 +1,8 @@
 {% load ui_tags %}
 <header x-data="{ mobileOpen: false, openMenu: null }"
+        x-init="$watch('mobileOpen', value => document.body.classList.toggle('overflow-hidden', value))"
         @keydown.escape.window="mobileOpen = false; openMenu = null"
-        class="sticky top-0 z-50 border-b border-gray-200 bg-white/95 backdrop-blur">
+        class="sticky top-0 z-[100] border-b border-gray-200 bg-white/95 backdrop-blur">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6">
         <a href="{% url 'core:home' %}" class="text-lg font-semibold tracking-tight text-navy-950 sm:text-xl">
             {{ site_name }}
@@ -41,13 +42,16 @@
             {% button primary_cta.label primary_cta.url "primary" %}
         </div>
 
+        <!-- Mobile menu trigger. It becomes a fixed close control while the drawer is open,
+             so the X never scrolls away with the page. -->
         <button type="button"
-                class="relative z-[70] flex h-11 w-11 items-center justify-center rounded-md text-navy-950 transition-colors hover:bg-gray-50 lg:hidden"
-                @click="mobileOpen = !mobileOpen"
+                class="relative z-[120] flex h-11 w-11 items-center justify-center rounded-md text-navy-950 transition-colors hover:bg-gray-50 lg:hidden"
+                :class="mobileOpen ? 'fixed right-4 top-4 bg-white shadow-sm ring-1 ring-gray-200' : ''"
+                @click.stop="mobileOpen = !mobileOpen"
                 :aria-expanded="mobileOpen"
                 aria-controls="mobile-navigation"
-                aria-label="Open navigation menu">
-            <span class="sr-only">Menu</span>
+                :aria-label="mobileOpen ? 'Close navigation menu' : 'Open navigation menu'">
+            <span class="sr-only" x-text="mobileOpen ? 'Close menu' : 'Open menu'">Menu</span>
             <span class="relative block h-6 w-6" aria-hidden="true">
                 <span class="absolute left-1/2 top-[7px] block h-0.5 w-5 -translate-x-1/2 rounded bg-current transition-all duration-200"
                       :class="mobileOpen ? 'top-1/2 rotate-45' : ''"></span>
@@ -59,10 +63,16 @@
         </button>
     </div>
 
+    <!-- Full-screen backdrop. Tapping anywhere outside the drawer closes it. -->
     <div x-show="mobileOpen"
-         x-transition.opacity
+         x-transition:enter="transition-opacity ease-out duration-250"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition-opacity ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
          @click="mobileOpen = false"
-         class="fixed inset-0 z-40 bg-navy-950/30 backdrop-blur-[2px] lg:hidden"
+         class="fixed inset-0 z-[80] bg-navy-950/30 backdrop-blur-[2px] lg:hidden"
          style="display: none;"
          aria-hidden="true"></div>
 
@@ -74,7 +84,8 @@
            x-transition:leave="transform transition ease-in duration-200"
            x-transition:leave-start="translate-x-0"
            x-transition:leave-end="translate-x-full"
-           class="fixed right-0 top-0 z-[60] flex h-dvh w-[min(88vw,390px)] flex-col overflow-y-auto border-l border-gray-200 bg-white px-6 pb-8 pt-24 shadow-2xl lg:hidden"
+           @click.stop
+           class="fixed right-0 top-0 z-[90] flex h-dvh w-[min(88vw,390px)] flex-col overflow-y-auto border-l border-gray-200 bg-white px-6 pb-8 pt-24 shadow-2xl lg:hidden"
            style="display: none;">
         <div class="mb-8">
             <p class="text-xs font-semibold uppercase tracking-[0.16em] text-gray-500">Navigation</p>
