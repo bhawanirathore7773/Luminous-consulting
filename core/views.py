@@ -1,4 +1,5 @@
-from django.http import HttpResponse
+from django.db import connection
+from django.http import HttpResponse, JsonResponse
 from django.views.generic import TemplateView
 
 from case_studies.models import CaseStudy
@@ -23,8 +24,6 @@ CAPABILITY_CATEGORIES = [
     "Managed Services",
 ]
 
-# Maps a problem the visitor selects to the service that best answers it.
-# Drives the client-side problem selector in problem_selector.html.
 PROBLEM_TO_SERVICE = [
     {"problem": "Modernize SAP", "service": "SAP Advisory & Strategy", "url": "/services/sap-consulting/"},
     {"problem": "Migrate to S/4HANA", "service": "SAP S/4HANA", "url": "/services/sap-s4hana/"},
@@ -40,14 +39,7 @@ PROBLEM_TO_SERVICE = [
 
 
 def _stack_layer(label, index, emphasis):
-    """Builds one box of the hero's SAP-landscape SVG diagram. `emphasis`
-    marks the three foundational layers (SAP Core / S/4HANA / BTP) with a
-    solid navy fill so the diagram reads as process-in / platform / value-out,
-    not just seven identical boxes."""
     y = 8 + index * 68
-    # Values are RGB triplets (e.g. "11 18 32"), so callers must wrap them in
-    # rgb(...) — this keeps a single source of truth with the Tailwind config,
-    # which needs the bare triplet form for its opacity-modifier support.
     if emphasis:
         fill, stroke, text_color = (
             "rgb(var(--color-navy-950))",
@@ -96,39 +88,13 @@ class HomeView(TemplateView):
         return context
 
 
-# Section 15's six-stage delivery methodology — a genuine sequence, so
-# numbering it (01-06) is warranted, unlike the parallel outcome pillars.
 METHODOLOGY_STEPS = [
-    {
-        "number": "01",
-        "name": "Discover",
-        "items": ["Business objectives", "Current landscape", "Pain points"],
-    },
-    {
-        "number": "02",
-        "name": "Assess",
-        "items": ["Processes", "Architecture", "Data", "Integration", "Technical debt"],
-    },
-    {
-        "number": "03",
-        "name": "Design",
-        "items": ["Target architecture", "Roadmap", "Solution design", "Delivery plan"],
-    },
-    {
-        "number": "04",
-        "name": "Deliver",
-        "items": ["Configure", "Develop", "Integrate", "Migrate", "Test", "Deploy"],
-    },
-    {
-        "number": "05",
-        "name": "Stabilize",
-        "items": ["Go-live", "Hypercare", "Issue resolution", "Knowledge transfer"],
-    },
-    {
-        "number": "06",
-        "name": "Optimize",
-        "items": ["Performance", "Automation", "Enhancements", "Continuous improvement"],
-    },
+    {"number": "01", "name": "Discover", "items": ["Business objectives", "Current landscape", "Pain points"]},
+    {"number": "02", "name": "Assess", "items": ["Processes", "Architecture", "Data", "Integration", "Technical debt"]},
+    {"number": "03", "name": "Design", "items": ["Target architecture", "Roadmap", "Solution design", "Delivery plan"]},
+    {"number": "04", "name": "Deliver", "items": ["Configure", "Develop", "Integrate", "Migrate", "Test", "Deploy"]},
+    {"number": "05", "name": "Stabilize", "items": ["Go-live", "Hypercare", "Issue resolution", "Knowledge transfer"]},
+    {"number": "06", "name": "Optimize", "items": ["Performance", "Automation", "Enhancements", "Continuous improvement"]},
 ]
 
 
@@ -139,6 +105,15 @@ class ApproachView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["methodology_steps"] = METHODOLOGY_STEPS
         return context
+
+
+def healthz(request):
+    """Lightweight readiness endpoint for Render/nginx health checks."""
+    try:
+        connection.ensure_connection()
+    except Exception:
+        return JsonResponse({"status": "unhealthy"}, status=503)
+    return JsonResponse({"status": "ok"})
 
 
 def robots_txt(request):
