@@ -1,0 +1,13 @@
+.git
+.github
+.gitignore
+.env
+.venv
+venv
+node_modules
+__pycache__
+*.pyc
+db.sqlite3
+staticfiles
+sap_platform_complete.zip
+README.md
