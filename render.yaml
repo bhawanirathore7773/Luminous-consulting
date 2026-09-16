@@ -13,10 +13,6 @@ services:
         value: "False"
       - key: SITE_NAME
         value: "Luminous Consulting"
-      - key: ALLOWED_HOSTS
-        sync: false
-      - key: CSRF_TRUSTED_ORIGINS
-        sync: false
       - key: RUN_SEED_DATA
         value: "true"
       - key: WEB_CONCURRENCY
