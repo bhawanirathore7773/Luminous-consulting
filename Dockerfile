@@ -1,12 +1,14 @@
 # syntax=docker/dockerfile:1
 
-# Build Tailwind assets in an isolated Node stage so Render/Hostinger do not
-# need Node installed in the Python runtime.
+# Build Tailwind CSS in an isolated Node stage. The complete source tree is
+# copied before the Tailwind build so its content globs can discover every
+# Django template and generate the utility classes used by the UI.
 FROM node:20-alpine AS assets
 WORKDIR /build
 COPY package.json ./
 COPY tailwind.config.js ./
 COPY core/static/core/css/src ./core/static/core/css/src
+COPY . .
 RUN npm install --no-audit --no-fund
 RUN npm run build:css
 
