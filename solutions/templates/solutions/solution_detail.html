@@ -1,0 +1,36 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ solution.display_meta_title }} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ solution.display_meta_description }}{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">{{ solution_schema_json }}</script>
+{% endblock %}
+
+{% block content %}
+    {% include "core/partials/detail_hero.html" with title=solution.name subtitle=solution.hero_intro cta_label=solution.cta_label cta_url="/contact/" %}
+
+    {% include "core/partials/text_section.html" with heading="The business challenge" body=solution.business_problem %}
+
+    {% include "core/partials/list_section.html" with heading="What this includes" items=solution.what_this_includes bg="gray" %}
+
+    {% include "core/partials/text_section.html" with heading="Our approach" body=solution.approach %}
+
+    {% include "core/partials/list_section.html" with heading="Outcomes addressed" items=solution.outcomes_addressed bg="gray" %}
+
+    {% include "core/partials/text_section.html" with heading="Who it's for" body=solution.who_its_for %}
+
+    {% if related_services %}
+        {% include "core/partials/related_grid.html" with heading="Delivered through" items=related_services %}
+    {% endif %}
+
+    {% if solution.faqs.all %}
+        {% include "core/partials/faq_section.html" with faqs=solution.faqs.all %}
+    {% endif %}
+
+    {% if related_solutions %}
+        {% include "core/partials/related_grid.html" with heading="Related solutions" items=related_solutions %}
+    {% endif %}
+
+    {% include "core/partials/final_cta.html" with cta_subtext=detail_cta_subtext cta_label=solution.cta_label cta_url="/contact/" %}
+{% endblock %}
