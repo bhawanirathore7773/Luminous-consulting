@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design tokens (Section 4 of the build spec).
+  Stored as space-separated RGB triplets — not hex — so Tailwind's
+  `text-ink/80`-style opacity modifiers work. See tailwind.config.js for how
+  these map to utility class names.
+*/
+@layer base {
+  :root {
+    --color-navy-950: 11 18 32;    /* #0B1220 — primary / dark section bg */
+    --color-navy-800: 19 33 59;    /* #13213B — secondary dark surface */
+    --color-accent: 27 95 168;     /* #1B5FA8 — controlled SAP-inspired blue */
+    --color-accent-dark: 20 74 135;/* #144A87 — accent hover state */
+    --color-ink: 26 35 50;         /* #1A2332 — body text (navy-tinted, not generic near-black) */
+    --color-gray-50: 245 247 250;  /* #F5F7FA — cool gray surface */
+    --color-gray-200: 226 230 235; /* #E2E6EB — hairline borders */
+    --color-gray-500: 107 114 128; /* #6B7280 — muted text */
+  }
+
+  html {
+    font-family: "Inter", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  /* Native <details>/<summary> accordion (FAQ sections) — suppress the
+     default twisty marker in all browsers so the custom SVG chevron is the
+     only indicator, instead of pulling in a JS accordion library. */
+  summary {
+    list-style: none;
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+/*
+  The hero's single deliberate motion moment: a data point traveling down the
+  SAP landscape stack. Everything else in the design system is static.
+*/
+@layer utilities {
+  .flow-pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: flow-travel 4s linear infinite;
+  }
+}
+
+@keyframes flow-travel {
+  0%   { transform: translateY(0); opacity: 0.9; }
+  50%  { transform: translateY(210px); opacity: 0.4; }
+  100% { transform: translateY(420px); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-pulse {
+    animation: none;
+    opacity: 0.6;
+  }
+}
