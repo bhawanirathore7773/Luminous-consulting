@@ -103,6 +103,7 @@ FOOTER_COLUMNS = [
             {"label": "Terms", "url": "/terms/"},
             {"label": "Cookie Policy", "url": "/cookie-policy/"},
             {"label": "Accessibility", "url": "/accessibility/"},
+            {"label": "Disclaimer", "url": "/disclaimer/"},
         ],
     },
 ]
