@@ -5,5 +5,7 @@
     "build:css": "tailwindcss -i ./core/static/core/css/src/input.css -o ./core/static/core/css/dist/styles.css --minify",
     "watch:css": "tailwindcss -i ./core/static/core/css/src/input.css -o ./core/static/core/css/dist/styles.css --watch"
   },
-  "devDependencies": {"tailwindcss": "^3.4.13"}
+  "devDependencies": {
+    "tailwindcss": "^3.4.13"
+  }
 }
