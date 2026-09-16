@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Django
+*.log
+db.sqlite3
+/staticfiles/
+.env
+
+# Node / Tailwind build
+node_modules/
+/core/static/core/css/dist/styles.css
