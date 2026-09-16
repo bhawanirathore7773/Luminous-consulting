@@ -1,0 +1,38 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ service.display_meta_title }} — {{ site_name }}{% endblock %}
+{% block meta_description %}{{ service.display_meta_description }}{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">{{ service_schema_json }}</script>
+{% endblock %}
+
+{% block content %}
+    {% include "core/partials/detail_hero.html" with title=service.name subtitle=service.hero_intro cta_label=service.cta_label cta_url="/contact/" %}
+
+    {% include "core/partials/text_section.html" with heading="The business problem" body=service.business_problem %}
+
+    {% include "core/partials/list_section.html" with heading="What we solve" items=service.what_we_solve bg="gray" %}
+
+    {% include "core/partials/list_section.html" with heading="Capabilities" items=service.capabilities %}
+
+    {% include "core/partials/list_section.html" with heading="Technology" items=service.technology bg="gray" %}
+
+    {% include "core/partials/text_section.html" with heading="Delivery approach" body=service.delivery_approach %}
+
+    {% include "core/partials/list_section.html" with heading="Deliverables" items=service.deliverables bg="gray" %}
+
+    {% include "core/partials/text_section.html" with heading="Engagement model" body=service.engagement_model %}
+
+    {% include "core/partials/text_section.html" with heading="Who it's for" body=service.who_its_for bg="gray" %}
+
+    {% if service.faqs.all %}
+        {% include "core/partials/faq_section.html" with faqs=service.faqs.all %}
+    {% endif %}
+
+    {% if related_services %}
+        {% include "core/partials/related_grid.html" with heading="Related services" items=related_services %}
+    {% endif %}
+
+    {% include "core/partials/final_cta.html" with cta_subtext=detail_cta_subtext cta_label=service.cta_label cta_url="/contact/" %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "core/base.html" %}
+{% load ui_tags %}
+
+{% block title %}SAP services — {{ site_name }}{% endblock %}
+{% block meta_description %}Advisory, S/4HANA transformation, integration, development, and managed services across the SAP lifecycle.{% endblock %}
+
+{% block content %}
+<section class="border-b border-gray-200 bg-white">
+    <div class="mx-auto max-w-3xl px-6 py-16 text-center">
+        <h1 class="text-4xl font-semibold tracking-tight text-navy-950">SAP services</h1>
+        <p class="mt-4 text-lg leading-relaxed text-ink/70">Advisory through to managed services — engage at the stage that matches where your SAP landscape is today.</p>
+    </div>
+</section>
+
+<section class="bg-white">
+    <div class="mx-auto max-w-7xl px-6 py-16">
+        {% if services %}
+            <div class="grid gap-px overflow-hidden rounded-md border border-gray-200 bg-gray-200 sm:grid-cols-2 lg:grid-cols-3">
+                {% for service in services %}
+                    <a href="{{ service.get_absolute_url }}" class="group flex flex-col gap-2 bg-white p-6 transition-colors hover:bg-gray-50">
+                        <p class="font-medium text-navy-950 group-hover:text-accent">{{ service.name }}</p>
+                        <p class="text-sm leading-relaxed text-ink/70">{{ service.short_summary }}</p>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="rounded-md border border-dashed border-gray-300 px-6 py-16 text-center">
+                <p class="text-ink/60">Services are being added — check back shortly.</p>
+                <div class="mt-4 flex justify-center">
+                    {% button "Talk to an SAP Expert" "/contact/" "secondary" %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% include "core/partials/final_cta.html" %}
+{% endblock %}
