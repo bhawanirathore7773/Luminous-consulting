@@ -18,9 +18,9 @@
         {% if case_studies %}
             <div class="grid gap-px overflow-hidden rounded-md border border-gray-200 bg-gray-200 sm:grid-cols-2 lg:grid-cols-3">
                 {% for case_study in case_studies %}
-                    <a href="{{ case_study.get_absolute_url }}" class="group flex flex-col gap-2 bg-white p-6 transition-colors md:hover:bg-gray-50">
+                    <a href="{{ case_study.get_absolute_url }}" class="group flex flex-col gap-2 bg-white p-6 transition-colors hover:bg-gray-50">
                         <p class="text-xs font-semibold text-accent">Representative use case{% if case_study.industry %} — {{ case_study.industry.name }}{% endif %}</p>
-                        <p class="font-medium text-navy-950 md:group-hover:text-accent">{{ case_study.title }}</p>
+                        <p class="font-medium text-navy-950 group-hover:text-accent">{{ case_study.title }}</p>
                         <p class="text-sm leading-relaxed text-ink/70">{{ case_study.short_summary }}</p>
                     </a>
                 {% endfor %}
