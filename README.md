@@ -236,3 +236,50 @@ done anywhere:
 Everything else — content models, the design system, all 7 phases of
 pages, search, the assessment wizard, the sitemap — is ready to run as-is.
 
+
+
+## Deployment hardening added
+
+The repository now includes:
+
+- Dockerfile with a reproducible Python + Tailwind multi-stage build.
+- docker-entrypoint.sh for database initialization, deployment checks, optional seed data, and Gunicorn.
+- render.yaml for a Render Web Service + PostgreSQL Blueprint.
+- /healthz/ readiness endpoint for Render health checks.
+- Production-safe reverse-proxy/HTTPS settings for Render and nginx/Hostinger.
+- GitHub Actions CI for Tailwind build, Django checks, deployment checks, migrations, tests, and collectstatic.
+- .dockerignore to keep the production image small.
+
+### Render
+
+Use the repository's render.yaml as a Blueprint. Render supports Docker services and Blueprint-managed databases. The app listens on Render's $PORT and exposes /healthz/ for readiness.
+
+For the first deployment, RUN_SEED_DATA=true loads the supplied service, solution, industry, expertise, case-study, insight, and legal seed content. After you have edited production content in /admin/, set RUN_SEED_DATA=false so deployments do not re-seed content.
+
+Important: the current repository does not contain committed Django migration files for the custom apps. The Docker entrypoint uses migrate --run-syncdb so the current database can bootstrap, but this is a deployment bridge, not the preferred long-term migration strategy. Before making schema changes in production, run python manage.py makemigrations locally and commit the generated migrations/ directories. Django recommends keeping migration files in version control.
+
+Render's Free Postgres is suitable for testing/preview, but current Render documentation says Free Postgres expires after 30 days and has no backups. Use a paid database for persistent production data.
+
+### Hostinger VPS
+
+The same Docker image can be run on a Hostinger VPS, or the project can be installed directly with Python + Gunicorn + nginx. For a VPS, keep:
+
+1. DEBUG=False
+2. DJANGO_SECRET_KEY in environment variables
+3. DATABASE_URL pointed at PostgreSQL
+4. ALLOWED_HOSTS set to the real domain
+5. CSRF_TRUSTED_ORIGINS set to the HTTPS origin when required
+6. nginx terminating TLS and proxying to Gunicorn
+7. committed Django migrations applied with python manage.py migrate
+8. python manage.py collectstatic --noinput
+
+### Local preflight
+
+    python manage.py check
+    python manage.py check --deploy
+    python manage.py makemigrations
+    python manage.py migrate
+    python manage.py test --verbosity 2
+    python manage.py collectstatic --noinput
+
+For production, do not use python manage.py runserver; use Gunicorn behind the platform/web server.
