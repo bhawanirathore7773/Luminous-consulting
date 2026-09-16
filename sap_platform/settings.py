@@ -1,9 +1,8 @@
 """
 Django settings for the SAP consulting platform.
 
-Config is environment-driven (see .env.example) so the same settings module
-works for local dev (SQLite) and production (Postgres) without code changes —
-just point DATABASE_URL at a Postgres instance and flip DEBUG off.
+Environment-driven so the same codebase can run locally, on Render, or on a
+Hostinger VPS without changing application code.
 """
 
 from pathlib import Path
@@ -12,20 +11,21 @@ import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-env = environ.Env(
-    DEBUG=(bool, False),
-)
-# Reads a .env file if present; in production these come from real env vars.
+env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("DJANGO_SECRET_KEY", default="dev-only-insecure-key-change-me")
-
-# Placeholder brand name — set the real one via .env. Deliberately generic
-# rather than an invented company name (Section 2 of the build spec: never
-# fabricate business identity/credentials).
 SITE_NAME = env("SITE_NAME", default="Your SAP Partner")
 DEBUG = env("DEBUG")
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+
+# Render supplies RENDER_EXTERNAL_HOSTNAME automatically. Custom domains and
+# Hostinger domains can be supplied through ALLOWED_HOSTS.
+DEFAULT_ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+if env("RENDER_EXTERNAL_HOSTNAME", default=""):
+    DEFAULT_ALLOWED_HOSTS.append(env("RENDER_EXTERNAL_HOSTNAME"))
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=DEFAULT_ALLOWED_HOSTS)
+
+CSRF_TRUSTED_ORIGINS = env.list("CSRF_TRUSTED_ORIGINS", default=[])
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -35,7 +35,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
-    # Local apps
     "core",
     "services",
     "solutions",
@@ -73,9 +72,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                # Site-wide nav/footer data (Phase 1: static; later phases can
-                # swap this to pull Service/Solution/Industry querysets once
-                # those apps exist).
                 "core.context_processors.global_nav",
             ],
         },
@@ -85,11 +81,10 @@ TEMPLATES = [
 WSGI_APPLICATION = "sap_platform.wsgi.application"
 ASGI_APPLICATION = "sap_platform.asgi.application"
 
-# Defaults to local SQLite so the project runs with zero setup; set
-# DATABASE_URL in .env to point at Postgres for anything beyond local dev.
 DATABASES = {
     "default": env.db("DATABASE_URL", default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"),
 }
+DATABASES["default"]["CONN_MAX_AGE"] = env.int("DB_CONN_MAX_AGE", default=60)
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -99,11 +94,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 LANGUAGE_CODE = "en-us"
-TIME_ZONE = "UTC"
+TIME_ZONE = env("TIME_ZONE", default="UTC")
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "core" / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STORAGES = {
@@ -114,12 +109,18 @@ STORAGES = {
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# --- Security (Section 31 of the build spec) -------------------------------
-# These only bite when DEBUG=False (production); harmless locally.
+# Reverse-proxy support for Render, nginx, and similar HTTPS terminators.
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=not DEBUG)
+
 SESSION_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_HTTPONLY = True
+
 SECURE_HSTS_SECONDS = 0 if DEBUG else 31536000
 SECURE_HSTS_INCLUDE_SUBDOMAINS = not DEBUG
+SECURE_HSTS_PRELOAD = not DEBUG
 SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "strict-origin-when-cross-origin"
 X_FRAME_OPTIONS = "DENY"
