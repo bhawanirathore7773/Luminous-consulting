@@ -1,6 +1,6 @@
 {% load ui_tags %}
 <header id="site-header"
-        class="sticky top-0 z-[100] border-b border-gray-200 bg-white/95 backdrop-blur">
+        class="sticky top-0 z-[200] border-b border-gray-200 bg-white/95 backdrop-blur">
     <div class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6">
         <a href="{% url 'core:home' %}"
            class="text-lg font-semibold tracking-tight text-navy-950 sm:text-xl">
@@ -45,10 +45,11 @@
             {% button primary_cta.label primary_cta.url "primary" %}
         </div>
 
-        <!-- One, persistent mobile trigger. It changes into the close icon in-place. -->
+        <!-- Single mobile control: it stays in this exact header position and
+             changes from hamburger to X. No second close button is rendered. -->
         <button id="mobile-menu-toggle"
                 type="button"
-                class="relative z-[130] flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-transparent text-navy-950 transition-all duration-200 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 lg:hidden"
+                class="relative z-[220] flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-transparent text-navy-950 transition-colors duration-200 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 lg:hidden"
                 aria-expanded="false"
                 aria-controls="mobile-navigation"
                 aria-label="Open navigation menu">
@@ -61,15 +62,16 @@
         </button>
     </div>
 
-    <!-- Backdrop: only the area outside the drawer is clickable. -->
+    <!-- Full-screen backdrop. It is deliberately below the drawer but above
+         page content, so tapping/clicking anywhere outside the drawer closes it. -->
     <div id="mobile-menu-backdrop"
-         class="pointer-events-none fixed inset-0 z-[105] bg-navy-950/35 opacity-0 backdrop-blur-[2px] transition-opacity duration-200 lg:hidden"
+         class="pointer-events-none fixed inset-0 z-[140] bg-navy-950/35 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 lg:hidden"
          aria-hidden="true"></div>
 
-    <!-- Full-height right drawer. The trigger remains above it so the same
-         hamburger location becomes the single X button while open. -->
+    <!-- Full-height right drawer. The header remains above it so the SAME
+         hamburger button becomes the only visible X in the original position. -->
     <aside id="mobile-navigation"
-           class="pointer-events-none fixed inset-y-0 right-0 z-[120] flex h-[100dvh] w-[min(88vw,390px)] translate-x-full flex-col overflow-y-auto overscroll-contain border-l border-gray-200 bg-white px-6 pb-8 pt-24 opacity-0 shadow-2xl transition-[transform,opacity] duration-300 ease-out lg:hidden"
+           class="pointer-events-none fixed inset-y-0 right-0 z-[150] flex h-[100dvh] w-[min(88vw,390px)] translate-x-full flex-col overflow-y-auto overscroll-contain border-l border-gray-200 bg-white px-6 pb-8 pt-24 opacity-0 shadow-2xl transition-[transform,opacity] duration-300 ease-out lg:hidden"
            aria-label="Mobile navigation"
            aria-hidden="true">
         <div class="mb-6 shrink-0">
@@ -101,68 +103,96 @@
         const toggle = document.getElementById("mobile-menu-toggle");
         const drawer = document.getElementById("mobile-navigation");
         const backdrop = document.getElementById("mobile-menu-backdrop");
-        if (!toggle || !drawer || !backdrop || toggle.dataset.initialized === "true") return;
 
+        if (!toggle || !drawer || !backdrop || toggle.dataset.initialized === "true") return;
         toggle.dataset.initialized = "true";
 
         const lines = toggle.querySelectorAll(".mobile-menu-line");
         const navLinks = drawer.querySelectorAll(".mobile-nav-link");
         let lockedScrollY = 0;
+        let isOpen = false;
 
         function lockPage() {
-            lockedScrollY = window.scrollY || window.pageYOffset;
+            lockedScrollY = window.scrollY || window.pageYOffset || 0;
+
             document.documentElement.classList.add("mobile-nav-open");
             document.body.classList.add("mobile-nav-open");
+
+            document.body.dataset.mobileNavPosition = document.body.style.position;
+            document.body.dataset.mobileNavTop = document.body.style.top;
+            document.body.dataset.mobileNavWidth = document.body.style.width;
+            document.body.dataset.mobileNavOverflow = document.body.style.overflow;
+
+            document.body.style.position = "fixed";
             document.body.style.top = "-" + lockedScrollY + "px";
+            document.body.style.width = "100%";
+            document.body.style.overflow = "hidden";
         }
 
         function unlockPage() {
             document.documentElement.classList.remove("mobile-nav-open");
             document.body.classList.remove("mobile-nav-open");
-            document.body.style.top = "";
+
+            document.body.style.position = document.body.dataset.mobileNavPosition || "";
+            document.body.style.top = document.body.dataset.mobileNavTop || "";
+            document.body.style.width = document.body.dataset.mobileNavWidth || "";
+            document.body.style.overflow = document.body.dataset.mobileNavOverflow || "";
+
+            delete document.body.dataset.mobileNavPosition;
+            delete document.body.dataset.mobileNavTop;
+            delete document.body.dataset.mobileNavWidth;
+            delete document.body.dataset.mobileNavOverflow;
+
             window.scrollTo(0, lockedScrollY);
         }
 
+        function setIcon(open) {
+            lines[0].classList.toggle("rotate-45", open);
+            lines[0].classList.toggle("-translate-y-1/2", open);
+            lines[0].classList.toggle("-translate-y-[7px]", !open);
+
+            lines[1].classList.toggle("scale-x-0", open);
+            lines[1].classList.toggle("opacity-0", open);
+
+            lines[2].classList.toggle("-rotate-45", open);
+            lines[2].classList.toggle("-translate-y-1/2", open);
+            lines[2].classList.toggle("translate-y-[7px]", !open);
+
+            toggle.classList.toggle("bg-gray-50", open);
+            toggle.setAttribute("aria-expanded", String(open));
+            toggle.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
+        }
+
         function openMenu() {
+            if (isOpen) return;
+            isOpen = true;
+
             drawer.classList.remove("pointer-events-none", "translate-x-full", "opacity-0");
             drawer.classList.add("pointer-events-auto", "translate-x-0", "opacity-100");
+
             backdrop.classList.remove("pointer-events-none", "opacity-0");
             backdrop.classList.add("pointer-events-auto", "opacity-100");
 
-            toggle.classList.add("mobile-menu-open", "mobile-menu-fixed");
-            toggle.setAttribute("aria-expanded", "true");
-            toggle.setAttribute("aria-label", "Close navigation menu");
-
-            lines[0].classList.remove("-translate-y-[7px]");
-            lines[0].classList.add("rotate-45", "-translate-y-1/2");
-            lines[1].classList.add("scale-x-0", "opacity-0");
-            lines[2].classList.remove("translate-y-[7px]");
-            lines[2].classList.add("-rotate-45", "-translate-y-1/2");
-
             drawer.setAttribute("aria-hidden", "false");
+            setIcon(true);
             lockPage();
         }
 
-        function closeMenu(restoreScroll) {
+        function closeMenu(restoreScroll = true) {
+            if (!isOpen) return;
+            isOpen = false;
+
             drawer.classList.add("pointer-events-none", "translate-x-full", "opacity-0");
             drawer.classList.remove("pointer-events-auto", "translate-x-0", "opacity-100");
+
             backdrop.classList.add("pointer-events-none", "opacity-0");
             backdrop.classList.remove("pointer-events-auto", "opacity-100");
 
-            toggle.classList.remove("mobile-menu-open", "mobile-menu-fixed");
-            toggle.setAttribute("aria-expanded", "false");
-            toggle.setAttribute("aria-label", "Open navigation menu");
-
-            lines[0].classList.remove("rotate-45", "-translate-y-1/2");
-            lines[0].classList.add("-translate-y-[7px]");
-            lines[1].classList.remove("scale-x-0", "opacity-0");
-            lines[2].classList.remove("-rotate-45", "-translate-y-1/2");
-            lines[2].classList.add("translate-y-[7px]");
-
             drawer.setAttribute("aria-hidden", "true");
+            setIcon(false);
             unlockPage();
 
-            if (!restoreScroll) {
+            if (restoreScroll) {
                 window.scrollTo(0, lockedScrollY);
             }
         }
@@ -170,12 +200,22 @@
         toggle.addEventListener("click", function (event) {
             event.preventDefault();
             event.stopPropagation();
-            toggle.getAttribute("aria-expanded") === "true" ? closeMenu(true) : openMenu();
+            isOpen ? closeMenu(true) : openMenu();
         });
 
-        backdrop.addEventListener("click", function () {
+        backdrop.addEventListener("pointerdown", function (event) {
+            event.preventDefault();
             closeMenu(true);
         });
+
+        // Safety net for iOS Safari/Android WebView: if a touch/click lands
+        // anywhere outside the drawer and the trigger, close the menu even if
+        // the backdrop's stacking context is affected by the page.
+        document.addEventListener("pointerdown", function (event) {
+            if (!isOpen) return;
+            if (drawer.contains(event.target) || toggle.contains(event.target)) return;
+            closeMenu(true);
+        }, true);
 
         navLinks.forEach(function (link) {
             link.addEventListener("click", function () {
@@ -184,16 +224,21 @@
         });
 
         document.addEventListener("keydown", function (event) {
-            if (event.key === "Escape" && toggle.getAttribute("aria-expanded") === "true") {
+            if (event.key === "Escape" && isOpen) {
                 closeMenu(true);
                 toggle.focus();
             }
         });
 
         window.addEventListener("resize", function () {
-            if (window.innerWidth >= 1024 && toggle.getAttribute("aria-expanded") === "true") {
+            if (window.innerWidth >= 1024 && isOpen) {
                 closeMenu(true);
             }
+        });
+
+        // Defensive reset if the page is restored from the browser back/forward cache.
+        window.addEventListener("pageshow", function () {
+            if (isOpen) closeMenu(false);
         });
     }
 
