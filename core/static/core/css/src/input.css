@@ -93,3 +93,41 @@
     }
   }
 }
+
+
+/* Mobile navigation: keep the header/control pinned to the viewport.
+   This is intentionally separate from the drawer so scrolling the page
+   never moves the hamburger/X out of view. */
+@media (max-width: 1023px) {
+  #site-header {
+    position: fixed !important;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200;
+  }
+
+  #main-content {
+    padding-top: 65px;
+  }
+
+  #mobile-navigation {
+    top: 0;
+    bottom: 0;
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+}
+
+/* Keep the mobile trigger visually identical in its header position while
+   the menu is open; only the three lines animate into a single X. */
+#mobile-menu-toggle {
+  position: relative;
+  z-index: 220;
+}
+
+#mobile-menu-toggle .mobile-menu-line {
+  transform-origin: center;
+  will-change: transform, opacity;
+}
