@@ -59,3 +59,45 @@
     opacity: 0.6;
   }
 }
+
+
+/* Mobile navigation: one fixed trigger, full-height drawer, and a true
+   page lock on iOS/Android so the background cannot scroll underneath it. */
+@layer components {
+  html.mobile-nav-open,
+  body.mobile-nav-open {
+    overflow: hidden;
+  }
+
+  body.mobile-nav-open {
+    position: fixed;
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+
+  .mobile-menu-fixed {
+    position: fixed !important;
+    top: 1.25rem;
+    right: 1.25rem;
+    z-index: 9999 !important;
+    background: rgb(255 255 255 / 0.96);
+    box-shadow: 0 1px 3px rgb(11 18 32 / 0.08), 0 0 0 1px rgb(226 230 235);
+  }
+
+  @media (min-width: 640px) and (max-width: 1023px) {
+    .mobile-menu-fixed {
+      top: 1.25rem;
+      right: 1.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu-fixed,
+    #mobile-navigation,
+    #mobile-menu-backdrop,
+    .mobile-menu-line {
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
