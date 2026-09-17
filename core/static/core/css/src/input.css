@@ -5,40 +5,33 @@
 /*
   Design tokens (Section 4 of the build spec).
   Stored as space-separated RGB triplets — not hex — so Tailwind's
-  `text-ink/80`-style opacity modifiers work. See tailwind.config.js for how
-  these map to utility class names.
+  opacity modifiers work. See tailwind.config.js.
 */
 @layer base {
   :root {
-    --color-navy-950: 11 18 32;    /* #0B1220 — primary / dark section bg */
-    --color-navy-800: 19 33 59;    /* #13213B — secondary dark surface */
-    --color-accent: 27 95 168;     /* #1B5FA8 — controlled SAP-inspired blue */
-    --color-accent-dark: 20 74 135;/* #144A87 — accent hover state */
-    --color-ink: 26 35 50;         /* #1A2332 — body text (navy-tinted, not generic near-black) */
-    --color-gray-50: 245 247 250;  /* #F5F7FA — cool gray surface */
-    --color-gray-200: 226 230 235; /* #E2E6EB — hairline borders */
-    --color-gray-500: 107 114 128; /* #6B7280 — muted text */
+    --color-navy-950: 11 18 32;
+    --color-navy-800: 19 33 59;
+    --color-accent: 27 95 168;
+    --color-accent-dark: 20 74 135;
+    --color-ink: 26 35 50;
+    --color-gray-50: 245 247 250;
+    --color-gray-200: 226 230 235;
+    --color-gray-500: 107 114 128;
   }
 
   html {
     font-family: "Inter", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
   }
 
-  /* Native <details>/<summary> accordion (FAQ sections) — suppress the
-     default twisty marker in all browsers so the custom SVG chevron is the
-     only indicator, instead of pulling in a JS accordion library. */
   summary {
     list-style: none;
   }
+
   summary::-webkit-details-marker {
     display: none;
   }
 }
 
-/*
-  The hero's single deliberate motion moment: a data point traveling down the
-  SAP landscape stack. Everything else in the design system is static.
-*/
 @layer utilities {
   .flow-pulse {
     transform-box: fill-box;
@@ -60,40 +53,39 @@
   }
 }
 
-
-/* Mobile navigation: one fixed trigger, full-height drawer, and a true
-   page lock on iOS/Android so the background cannot scroll underneath it. */
 @layer components {
   html.mobile-nav-open,
   body.mobile-nav-open {
     overflow: hidden;
+    overscroll-behavior: none;
   }
 
   body.mobile-nav-open {
-    position: fixed;
-    left: 0;
-    right: 0;
-    width: 100%;
+    touch-action: none;
   }
 
-  .mobile-menu-fixed {
-    position: fixed !important;
-    top: 1.25rem;
-    right: 1.25rem;
-    z-index: 9999 !important;
-    background: rgb(255 255 255 / 0.96);
-    box-shadow: 0 1px 3px rgb(11 18 32 / 0.08), 0 0 0 1px rgb(226 230 235);
+  /* Keep the single trigger in its normal header position. The header itself
+     sits above the drawer, so the hamburger becomes the only X button. */
+  #site-header {
+    isolation: isolate;
   }
 
-  @media (min-width: 640px) and (max-width: 1023px) {
-    .mobile-menu-fixed {
-      top: 1.25rem;
-      right: 1.5rem;
-    }
+  #mobile-menu-toggle {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  #mobile-navigation {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  #mobile-menu-backdrop {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .mobile-menu-fixed,
     #mobile-navigation,
     #mobile-menu-backdrop,
     .mobile-menu-line {
