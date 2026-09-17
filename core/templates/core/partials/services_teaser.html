@@ -1,23 +1,46 @@
-<section class="bg-white">
-    <div class="mx-auto max-w-7xl px-6 py-20">
-        <div class="max-w-xl">
-            <h2 class="text-3xl font-semibold tracking-tight text-navy-950">End-to-end SAP services</h2>
-            <p class="mt-4 text-ink/70">Advisory through to managed services — engage at the stage that matches where your SAP landscape is today.</p>
+<section class="bg-white" aria-labelledby="services-teaser-heading">
+    <div class="mx-auto max-w-7xl px-5 py-16 sm:px-6 md:py-20">
+        <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+            <div class="max-w-2xl">
+                <p class="text-sm font-semibold uppercase tracking-[0.16em] text-accent">What we do</p>
+                <h2 id="services-teaser-heading" class="mt-3 text-3xl font-semibold tracking-tight text-navy-950 md:text-4xl">End-to-end SAP services</h2>
+                <p class="mt-4 text-base leading-7 text-ink/70">Clear, practical SAP services from strategy and implementation to integration, development and ongoing support.</p>
+            </div>
+            <a href="/services/" class="inline-flex shrink-0 items-center text-sm font-semibold text-accent transition-transform hover:translate-x-1">View all services <span class="ml-2" aria-hidden="true">→</span></a>
         </div>
 
         {% if services %}
-            <div class="mt-10 grid gap-px overflow-hidden rounded-md border border-gray-200 bg-gray-200 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 {% for service in services %}
-                    <a href="{{ service.get_absolute_url }}" class="group flex flex-col gap-2 bg-white p-6 transition-colors hover:bg-gray-50">
-                        <p class="font-medium text-navy-950 group-hover:text-accent">{{ service.name }}</p>
-                        <p class="text-sm leading-relaxed text-ink/70">{{ service.short_summary }}</p>
+                    <a href="{{ service.get_absolute_url }}" class="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-accent/40">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            {% if forloop.counter == 1 %}
+                                <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80" alt="SAP consulting and business advisory team" loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            {% elif forloop.counter == 2 %}
+                                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=900&q=80" alt="SAP implementation and transformation planning" loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            {% elif forloop.counter == 3 %}
+                                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80" alt="Enterprise technology and SAP integration" loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            {% elif forloop.counter == 4 %}
+                                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=900&q=80" alt="Cloud infrastructure for SAP managed services" loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            {% elif forloop.counter == 5 %}
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=900&q=80" alt="SAP data and analytics" loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            {% else %}
+                                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=900&q=80" alt="Enterprise digital technology services" loading="lazy" class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105">
+                            {% endif %}
+                            <div class="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-transparent opacity-70"></div>
+                            <span class="absolute right-4 bottom-4 flex h-10 w-10 items-center justify-center rounded-full bg-white text-navy-950 shadow-md transition-all duration-300 group-hover:bg-accent group-hover:text-white" aria-hidden="true">↗</span>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-xs font-semibold uppercase tracking-[0.14em] text-accent">{{ forloop.counter|stringformat:"02d" }}</p>
+                            <h3 class="mt-2 text-lg font-semibold leading-7 text-navy-950 group-hover:text-accent">{{ service.name }}</h3>
+                            <p class="mt-3 text-sm leading-6 text-ink/70">{{ service.short_summary }}</p>
+                            <span class="mt-5 inline-flex text-sm font-semibold text-accent">Explore service <span class="ml-1 transition-transform group-hover:translate-x-1" aria-hidden="true">→</span></span>
+                        </div>
                     </a>
                 {% endfor %}
             </div>
         {% else %}
-            <div class="mt-10 rounded-md border border-dashed border-gray-300 px-6 py-12 text-center text-ink/60">
-                Services are being added — check back shortly.
-            </div>
+            <div class="mt-10 rounded-2xl border border-dashed border-gray-300 px-6 py-12 text-center text-ink/60">Services are being added — check back shortly.</div>
         {% endif %}
     </div>
 </section>
