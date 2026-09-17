@@ -6,16 +6,23 @@
                 <p class="mt-4 max-w-sm text-sm leading-6 text-white/65">
                     SAP consulting for transformation, integration, development, data and managed services. Clear advice, practical delivery.
                 </p>
-                <a href="/contact/" class="mt-6 inline-flex text-sm font-semibold text-white hover:text-white/80">Start a conversation →</a>
+                <a href="/contact/" class="mt-6 inline-flex text-sm font-semibold text-white transition-colors hover:text-white/80">Start a conversation →</a>
             </div>
-            <div class="md:col-span-8">
-                <div class="grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-5">
+
+            <div class="min-w-0 md:col-span-8">
+                <!-- Two columns on phones, three on tablets, five on desktop. -->
+                <div class="grid min-w-0 grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
                     {% for column in footer_columns %}
-                        <div>
+                        <div class="min-w-0">
                             <p class="text-sm font-semibold text-white">{{ column.heading }}</p>
                             <ul class="mt-4 space-y-3">
                                 {% for link in column.links %}
-                                    <li><a href="{{ link.url }}" class="text-sm text-white/60 transition-colors hover:text-white">{{ link.label }}</a></li>
+                                    <li class="min-w-0">
+                                        <a href="{{ link.url }}"
+                                           class="block break-words text-sm leading-5 text-white/60 transition-colors duration-200 hover:text-white focus:text-white focus:outline-none focus-visible:underline">
+                                            {{ link.label }}
+                                        </a>
+                                    </li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -23,9 +30,10 @@
                 </div>
             </div>
         </div>
+
         <div class="mt-14 flex flex-col gap-4 border-t border-white/10 pt-7 text-xs text-white/45 md:flex-row md:items-center md:justify-between">
             <p>© {% now "Y" %} {{ site_name }}. All rights reserved.</p>
-            <p>SAP is a trademark of SAP SE or its affiliates. Luminous Consulting is independently operated.</p>
+            <p class="max-w-2xl">SAP is a trademark of SAP SE or its affiliates. Luminous Consulting is independently operated.</p>
         </div>
     </div>
 </footer>
