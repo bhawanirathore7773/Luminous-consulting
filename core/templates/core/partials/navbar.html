@@ -63,7 +63,7 @@
 
     <!-- Backdrop: only the area outside the drawer is clickable. -->
     <div id="mobile-menu-backdrop"
-         class="pointer-events-none fixed inset-0 z-[105] bg-navy-950/35 opacity-0 backdrop-blur-[2px] transition-opacity duration-250 lg:hidden"
+         class="pointer-events-none fixed inset-0 z-[105] bg-navy-950/35 opacity-0 backdrop-blur-[2px] transition-opacity duration-200 lg:hidden"
          aria-hidden="true"></div>
 
     <!-- Full-height right drawer. The trigger remains above it so the same
@@ -129,7 +129,7 @@
             backdrop.classList.remove("pointer-events-none", "opacity-0");
             backdrop.classList.add("pointer-events-auto", "opacity-100");
 
-            toggle.classList.add("mobile-menu-open");
+            toggle.classList.add("mobile-menu-open", "mobile-menu-fixed");
             toggle.setAttribute("aria-expanded", "true");
             toggle.setAttribute("aria-label", "Close navigation menu");
 
@@ -149,7 +149,7 @@
             backdrop.classList.add("pointer-events-none", "opacity-0");
             backdrop.classList.remove("pointer-events-auto", "opacity-100");
 
-            toggle.classList.remove("mobile-menu-open");
+            toggle.classList.remove("mobile-menu-open", "mobile-menu-fixed");
             toggle.setAttribute("aria-expanded", "false");
             toggle.setAttribute("aria-label", "Open navigation menu");
 
