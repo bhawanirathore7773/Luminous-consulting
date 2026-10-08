@@ -7,9 +7,11 @@ export class LeadsService {
   constructor(private readonly prisma: PrismaService) {}
 
   create(dto: CreateLeadDto) {
+    if (dto.website) return null;
+    const { website, ...lead } = dto;
     return this.prisma.lead.create({
       data: {
-        ...dto,
+        ...lead,
         source: 'contact_page',
       },
     });
