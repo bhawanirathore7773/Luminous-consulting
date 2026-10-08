@@ -7,7 +7,7 @@ const dir = path.resolve(process.cwd(), 'prisma/source-data');
 
 const read = (name: string) => {
   const file = path.join(dir, name);
-  if (!fs.existsSync(file)) return [];
+  if (!fs.existsSync(file)) throw new Error(`Missing required seed file: ${file}`);
   return JSON.parse(fs.readFileSync(file, 'utf8'));
 };
 
@@ -133,6 +133,15 @@ async function main() {
       const service=await prisma.service.findUnique({where:{slug}});
       if(service) await prisma.articleServiceRelation.create({data:{articleId:article.id,serviceId:service.id}});
     }
+  }
+
+  const legalPages = read('legal.json');
+  for (const x of legalPages) {
+    await prisma.legalPage.upsert({
+      where: { slug: x.slug },
+      update: { title: x.title, content: x.content, metaTitle: x.meta_title || null, metaDescription: x.meta_description || null },
+      create: { slug: x.slug, title: x.title, content: x.content, metaTitle: x.meta_title || null, metaDescription: x.meta_description || null },
+    });
   }
 }
 
