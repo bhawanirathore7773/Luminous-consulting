@@ -21,6 +21,10 @@ jobs:
         working-directory: backend
         run: npm install
 
+      - name: Export canonical Django seed data
+        working-directory: backend
+        run: python scripts/export_django_seed.py
+
       - name: Validate Prisma schema
         working-directory: backend
         run: npx prisma validate
@@ -28,6 +32,10 @@ jobs:
       - name: Generate Prisma client
         working-directory: backend
         run: npx prisma generate
+
+      - name: Type-check Prisma seed
+        working-directory: backend
+        run: npx tsc --noEmit --target ES2022 --module commonjs --moduleResolution node prisma/seed.ts
 
       - name: Build NestJS
         working-directory: backend
