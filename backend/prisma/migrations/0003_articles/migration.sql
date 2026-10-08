@@ -1,0 +1,20 @@
+CREATE TABLE `articles` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(200) NOT NULL,
+  `slug` VARCHAR(220) NOT NULL,
+  `summary` VARCHAR(250) NOT NULL,
+  `author` VARCHAR(120) NOT NULL DEFAULT 'SAP Practice Team',
+  `published_date` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `category` VARCHAR(40) NOT NULL,
+  `content_type` VARCHAR(40) NOT NULL,
+  `content` LONGTEXT NOT NULL,
+  `cta_label` VARCHAR(80) NOT NULL,
+  `meta_title` VARCHAR(70) NULL,
+  `meta_description` VARCHAR(160) NULL,
+  `sort_order` INT NOT NULL DEFAULT 0,
+  `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updated_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `articles_slug_key` (`slug`),
+  INDEX `articles_category_published_date_idx` (`category`, `published_date`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
