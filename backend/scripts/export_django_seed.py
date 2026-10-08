@@ -26,7 +26,6 @@ SOURCES = {
     "case_studies": ROOT / "case_studies/management/commands/seed_case_studies.py",
     "insights": ROOT / "insights/management/commands/seed_insights.py",
     "expertise": ROOT / "sap_expertise/management/commands/seed_expertise.py",
-    "legal": ROOT / "legal/management/commands/seed_legal.py",
 }
 
 CONSTANTS = {
@@ -80,8 +79,7 @@ for name, path in SOURCES.items():
         "case_studies": ["CASE_STUDIES_DATA"],
         "insights": ["ARTICLES_DATA"],
         "expertise": ["EXPERTISE_DATA"],
-        "legal": ["LEGAL_PAGES_DATA"],
-    }[name]
+        }[name]
     data = extract(module, candidates)
     (OUT / f"{name}.json").write_text(
         json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
