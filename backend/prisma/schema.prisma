@@ -19,6 +19,7 @@ model Service {
   name               String   @db.VarChar(120)
   slug               String   @unique @db.VarChar(140)
   shortSummary       String   @map("short_summary") @db.VarChar(200)
+  imageUrl           String?  @map("image_url") @db.VarChar(500)
   heroIntro          String   @map("hero_intro") @db.Text
   businessProblem    String   @map("business_problem") @db.Text
   deliveryApproach   String   @map("delivery_approach") @db.Text
@@ -73,6 +74,7 @@ model Industry {
   name           String   @db.VarChar(120)
   slug           String   @unique @db.VarChar(140)
   shortSummary   String   @map("short_summary") @db.VarChar(200)
+  imageUrl      String?  @map("image_url") @db.VarChar(500)
   heroIntro      String   @map("hero_intro") @db.Text
   sapLandscape   String   @map("sap_landscape") @db.Text
   outcomes       String   @db.Text
@@ -119,6 +121,7 @@ model Solution {
   name            String   @db.VarChar(120)
   slug            String   @unique @db.VarChar(140)
   shortSummary    String   @map("short_summary") @db.VarChar(200)
+  imageUrl       String?  @map("image_url") @db.VarChar(500)
   heroIntro       String   @map("hero_intro") @db.Text
   businessProblem String   @map("business_problem") @db.Text
   approach        String   @db.Text
@@ -177,6 +180,7 @@ model CaseStudy {
   id                Int      @id @default(autoincrement())
   title             String   @db.VarChar(200)
   slug              String   @unique @db.VarChar(220)
+  imageUrl          String?  @map("image_url") @db.VarChar(500)
   shortSummary      String   @map("short_summary") @db.VarChar(200)
   industryId        Int?     @map("industry_id")
   businessChallenge String   @map("business_challenge") @db.Text
@@ -213,6 +217,7 @@ model Article {
   id              Int      @id @default(autoincrement())
   title           String   @db.VarChar(200)
   slug            String   @unique @db.VarChar(220)
+  imageUrl        String?  @map("image_url") @db.VarChar(500)
   summary         String   @db.VarChar(250)
   author          String   @default("SAP Practice Team") @db.VarChar(120)
   publishedDate   DateTime @default(now()) @map("published_date")
@@ -257,6 +262,7 @@ model ExpertiseItem {
   category    String   @db.VarChar(40)
   name        String   @db.VarChar(100)
   description String   @default("") @db.VarChar(200)
+  imageUrl    String?  @map("image_url") @db.VarChar(500)
   sortOrder   Int      @default(0) @map("sort_order")
 
   @@index([category, sortOrder])
@@ -267,6 +273,8 @@ model TeamMember {
   id             Int      @id @default(autoincrement())
   name           String   @db.VarChar(120)
   role           String   @db.VarChar(120)
+  imageUrl       String?  @map("image_url") @db.VarChar(500)
+  linkedinUrl    String?  @map("linkedin_url") @db.VarChar(500)
   category       String   @db.VarChar(30)
   expertise      String   @db.Text
   modules        String   @db.VarChar(200)
