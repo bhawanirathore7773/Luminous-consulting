@@ -79,7 +79,7 @@ for name, path in SOURCES.items():
         "case_studies": ["CASE_STUDIES_DATA"],
         "insights": ["ARTICLES_DATA"],
         "expertise": ["EXPERTISE_DATA"],
-        }[name]
+    }[name]
     data = extract(module, candidates)
     (OUT / f"{name}.json").write_text(
         json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8"
