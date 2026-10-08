@@ -24,7 +24,7 @@ async function seedTeamMembers() {
       name: 'Bhawani Singh',
       role: 'SAP ABAP Developer',
       imageUrl: '/team/bhawani-singh.webp',
-      linkedinUrl: 'https://www.linkedin.com/',
+      linkedinUrl: null,
       category: 'Technical',
       expertise: 'SAP ABAP development, reports, ALV, Smart Forms and SAP technical solutions.',
       modules: 'SAP ABAP, SAP MM',
