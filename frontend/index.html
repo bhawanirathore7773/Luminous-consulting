@@ -9,6 +9,21 @@
 </head>
 <body>
 <div id="root"></div>
+<script>
+window.addEventListener('error', function (event) {
+  var target = event.target;
+  if (target && target.tagName === 'SCRIPT') {
+    var root = document.getElementById('root');
+    root.innerHTML = '<div style="font-family:system-ui,sans-serif;padding:40px;max-width:760px;margin:auto"><h1 style="font-size:24px">Frontend failed to load</h1><p>The production JavaScript bundle could not be loaded.</p><p style="word-break:break-word;color:#666">Failed resource: ' + (target.src || 'unknown') + '</p></div>';
+  }
+}, true);
+window.addEventListener('unhandledrejection', function (event) {
+  var root = document.getElementById('root');
+  if (root && root.children.length === 0) {
+    root.innerHTML = '<div style="font-family:system-ui,sans-serif;padding:40px;max-width:760px;margin:auto"><h1 style="font-size:24px">Frontend error</h1><p>' + String(event.reason || 'Unknown runtime error') + '</p></div>';
+  }
+});
+</script>
 <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>
