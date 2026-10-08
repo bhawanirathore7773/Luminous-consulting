@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 const prisma = new PrismaClient();
-const dir = path.resolve(__dirname, 'source-data');
+const dir = path.resolve(process.cwd(), 'prisma/source-data');
 
 const read = (name: string) => {
   const file = path.join(dir, name);
