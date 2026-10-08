@@ -74,6 +74,7 @@ model Industry {
   updatedAt      DateTime @updatedAt @map("updated_at")
 
   listItems IndustryListItem[]
+  caseStudies CaseStudy[]
   serviceRelations IndustryServiceRelation[]
   faqs Faq[]
 
@@ -118,10 +119,24 @@ model Solution {
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
+  listItems       SolutionListItem[]
   serviceRelations SolutionServiceRelation[]
-  faqs Faq[]
+  faqs             Faq[]
 
   @@map("solutions")
+}
+
+model SolutionListItem {
+  id         Int      @id @default(autoincrement())
+  solutionId Int      @map("solution_id")
+  section    String   @db.VarChar(40)
+  text       String   @db.VarChar(300)
+  sortOrder  Int      @default(0) @map("sort_order")
+
+  solution Solution @relation(fields: [solutionId], references: [id], onDelete: Cascade)
+
+  @@index([solutionId, section, sortOrder])
+  @@map("solution_list_items")
 }
 
 model SolutionServiceRelation {
@@ -174,22 +189,27 @@ model Article {
 }
 
 model ExpertiseItem {
-  id        Int      @id @default(autoincrement())
-  category  String   @db.VarChar(40)
-  name      String   @db.VarChar(160)
-  sortOrder Int      @default(0) @map("sort_order")
+  id          Int      @id @default(autoincrement())
+  category    String   @db.VarChar(40)
+  name        String   @db.VarChar(100)
+  description String   @default("") @db.VarChar(200)
+  sortOrder   Int      @default(0) @map("sort_order")
 
   @@index([category, sortOrder])
   @@map("expertise_items")
 }
 
 model TeamMember {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(160)
-  category    String   @db.VarChar(40)
-  role        String?  @db.VarChar(160)
-  bio         String?  @db.Text
-  sortOrder   Int      @default(0) @map("sort_order")
+  id             Int      @id @default(autoincrement())
+  name           String   @db.VarChar(120)
+  role           String   @db.VarChar(120)
+  category       String   @db.VarChar(30)
+  expertise      String   @db.Text
+  modules        String   @db.VarChar(200)
+  technologies   String   @db.VarChar(200)
+  industries     String   @db.VarChar(200)
+  certifications String   @db.VarChar(300)
+  sortOrder      Int      @default(0) @map("sort_order")
 
   @@index([category, sortOrder])
   @@map("team_members")
