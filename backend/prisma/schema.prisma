@@ -29,6 +29,7 @@ model Service {
   faqs               Faq[]
   relatedFrom        ServiceRelation[] @relation("ServiceRelationFrom")
   relatedTo          ServiceRelation[] @relation("ServiceRelationTo")
+  caseStudyRelations CaseStudyServiceRelation[]
 
   @@index([featured, sortOrder])
   @@map("services")
@@ -119,8 +120,10 @@ model Solution {
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
-  listItems       SolutionListItem[]
+  listItems        SolutionListItem[]
   serviceRelations SolutionServiceRelation[]
+  relatedFrom      SolutionRelation[] @relation("SolutionRelationFrom")
+  relatedTo        SolutionRelation[] @relation("SolutionRelationTo")
   faqs             Faq[]
 
   @@map("solutions")
@@ -137,6 +140,17 @@ model SolutionListItem {
 
   @@index([solutionId, section, sortOrder])
   @@map("solution_list_items")
+}
+
+model SolutionRelation {
+  fromId Int @map("from_id")
+  toId   Int @map("to_id")
+
+  from Solution @relation("SolutionRelationFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  to   Solution @relation("SolutionRelationTo", fields: [toId], references: [id], onDelete: Cascade)
+
+  @@id([fromId, toId])
+  @@map("solution_relations")
 }
 
 model SolutionServiceRelation {
@@ -185,7 +199,29 @@ model Article {
   updatedAt       DateTime @updatedAt @map("updated_at")
 
   @@index([category, publishedDate])
+  relatedServiceLinks ArticleServiceRelation[]
+  relatedArticleFrom ArticleRelation[] @relation("ArticleRelationFrom")
+  relatedArticleTo ArticleRelation[] @relation("ArticleRelationTo")
+
   @@map("articles")
+}
+
+model ArticleServiceRelation {
+  articleId Int @map("article_id")
+  serviceId Int @map("service_id")
+  article Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  @@id([articleId, serviceId])
+  @@map("article_service_relations")
+}
+
+model ArticleRelation {
+  fromId Int @map("from_id")
+  toId Int @map("to_id")
+  from Article @relation("ArticleRelationFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  to Article @relation("ArticleRelationTo", fields: [toId], references: [id], onDelete: Cascade)
+  @@id([fromId, toId])
+  @@map("article_relations")
 }
 
 model ExpertiseItem {
