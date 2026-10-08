@@ -1,0 +1,46 @@
+name: Migration build check
+
+on:
+  push:
+    branches:
+      - migration/nestjs-prisma-mysql-hostinger
+  pull_request:
+    branches:
+      - migration/nestjs-prisma-mysql-hostinger
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            backend/package.json
+            frontend/package.json
+
+      - name: Install backend
+        working-directory: backend
+        run: npm install
+
+      - name: Validate Prisma schema
+        working-directory: backend
+        run: npx prisma validate
+
+      - name: Generate Prisma client
+        working-directory: backend
+        run: npx prisma generate
+
+      - name: Build NestJS
+        working-directory: backend
+        run: npm run build
+
+      - name: Install frontend
+        working-directory: frontend
+        run: npm install
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
