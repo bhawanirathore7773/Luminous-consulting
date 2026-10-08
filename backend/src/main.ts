@@ -1,23 +1,47 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { ConfigService } from '@nestjs/config';
 import { AppModule } from './app.module';
+import * as express from 'express';
+import * as path from 'path';
+import * as fs from 'fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
+  const config = app.get(ConfigService);
+  const port = Number(config.get('PORT') || 3000);
+  const frontendDist = path.resolve(process.env.FRONTEND_DIST_PATH || '../frontend/dist');
 
+  app.enableCors({
+    origin: config.get('CORS_ORIGIN') || true,
+    credentials: true,
+  });
   app.setGlobalPrefix('api');
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      transform: true,
-      forbidNonWhitelisted: false,
-    }),
-  );
+  await app.init();
 
-  app.enableShutdownHooks();
+  if (fs.existsSync(frontendDist)) {
+    app.use(express.static(frontendDist, { index: 'index.html' }));
 
-  await app.listen(process.env.PORT ? Number(process.env.PORT) : 3000, '0.0.0.0');
+    app.use((req, res, next) => {
+      if (
+        req.path.startsWith('/api') ||
+        req.path === '/robots.txt' ||
+        req.path === '/sitemap.xml' ||
+        path.extname(req.path)
+      ) {
+        return next();
+      }
+
+      const indexFile = path.join(frontendDist, 'index.html');
+      if (fs.existsSync(indexFile)) {
+        return res.sendFile(indexFile);
+      }
+      return next();
+    });
+  }
+
+  await app.listen(port, '0.0.0.0');
 }
-
 bootstrap();
