@@ -11,7 +11,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = app.get(ConfigService);
   const port = Number(config.get('PORT') || 3000);
-  const frontendDist = path.resolve(__dirname, process.env.FRONTEND_DIST_PATH || '../../frontend/dist');
+  const frontendDist = path.resolve(
+    __dirname,
+    process.env.FRONTEND_DIST_PATH || './public',
+  );
 
   app.enableCors({
     origin: config.get('CORS_ORIGIN') || true,
