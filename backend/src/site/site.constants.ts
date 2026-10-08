@@ -1,5 +1,5 @@
 export const siteConstants = {
-  siteName: process.env.SITE_NAME || 'Luminous Consulting',
+  siteName: process.env.SITE_NAME || 'Valmath Consulting',
   outcomes: [
     { name: 'Modernize', description: 'Modernize legacy SAP landscapes.' },
     { name: 'Integrate', description: 'Connect SAP with the wider enterprise ecosystem.' },
