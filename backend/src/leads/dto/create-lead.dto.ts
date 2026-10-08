@@ -16,5 +16,6 @@ export class CreateLeadDto {
   @IsOptional() @IsString() @MaxLength(30) projectStage?: string;
   @IsOptional() @IsString() @MaxLength(30) timeline?: string;
   @IsOptional() @IsString() @MaxLength(30) estimatedScope?: string;
+  @IsOptional() @IsString() @MaxLength(50) source?: string;
   @IsOptional() @IsString() message?: string;
 }
