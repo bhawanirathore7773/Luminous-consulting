@@ -9,9 +9,9 @@
     "start:prod": "node dist/main.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma db push --accept-data-loss=false",
+    "prisma:validate": "prisma validate",
     "prisma:seed": "tsx prisma/seed.ts",
-    "prisma:source-export": "python scripts/export_django_seed.py",
-    "prisma:validate": "prisma validate"
+    "prisma:source-export": "python scripts/export_django_seed.py"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.6",
