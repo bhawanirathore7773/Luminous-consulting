@@ -23,7 +23,7 @@ async function seedTeamMembers() {
     {
       name: 'Bhawani Singh',
       role: 'SAP ABAP Developer',
-      imageUrl: '/team/dheeraj-nishad.jpg',
+      imageUrl: '/team/bhawani-singh.webp',
       linkedinUrl: null,
       category: 'Technical',
       expertise: 'SAP ABAP development, reports, ALV, Smart Forms and SAP technical solutions.',
@@ -36,8 +36,8 @@ async function seedTeamMembers() {
     {
       name: 'Dheeraj Kashyap',
       role: 'SAP S/4HANA FICO Consultant',
-      imageUrl: '/team/bhawani-singh.jpg',
-      linkedinUrl: 'https://www.linkedin.com/in/dheeraj-nishad-a52b23206',
+      imageUrl: '/team/dheeraj-nishad.webp',
+      linkedinUrl: null,
       category: 'Functional',
       expertise: 'SAP FICO, financial management, implementation, rollout, production support, migration and SAP integration.',
       modules: 'SAP FI/CO, S/4HANA',
