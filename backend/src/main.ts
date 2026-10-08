@@ -5,6 +5,7 @@ import { AppModule } from './app.module';
 import * as express from 'express';
 import * as path from 'path';
 import * as fs from 'fs';
+import { Request, Response, NextFunction } from 'express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -24,7 +25,7 @@ async function bootstrap() {
   if (fs.existsSync(frontendDist)) {
     app.use(express.static(frontendDist, { index: 'index.html' }));
 
-    app.use((req, res, next) => {
+    app.use((req: Request, res: Response, next: NextFunction) => {
       if (
         req.path.startsWith('/api') ||
         req.path === '/robots.txt' ||
