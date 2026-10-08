@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "npm run build:frontend && npm run prisma:generate && nest build && npm run package:frontend",
+    "build": "npm run build:frontend && npm run prisma:generate && npm run compile && npm run package:frontend",
     "build:frontend": "cd ../frontend && npm install --include=dev && npm run build",
     "package:frontend": "rm -rf dist/public && cp -R ../frontend/dist dist/public",
     "start": "node dist/main.js",
@@ -13,7 +13,8 @@
     "prisma:migrate": "prisma migrate deploy",
     "prisma:validate": "prisma validate",
     "prisma:seed": "tsx prisma/seed.ts",
-    "prisma:source-export": "python scripts/export_django_seed.py"
+    "prisma:source-export": "python scripts/export_django_seed.py",
+    "compile": "rm -rf dist && tsc -p tsconfig.json && test -f dist/main.js && echo 'Verified entry: dist/main.js'"
   },
   "dependencies": {
     "@nestjs/common": "^11.1.6",
