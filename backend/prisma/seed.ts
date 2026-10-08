@@ -135,6 +135,63 @@ async function main() {
     }
   }
 
+  // Rebuild all cross-content relations after every entity exists. This makes
+  // seeding independent of the order used in the canonical Django seed files.
+  for (const x of services) {
+    const from = await prisma.service.findUnique({ where: { slug: x.slug } });
+    if (!from) continue;
+    await prisma.serviceRelation.deleteMany({ where: { fromId: from.id } });
+    for (const slug of x.related_services || []) {
+      const to = await prisma.service.findUnique({ where: { slug } });
+      if (to) await prisma.serviceRelation.create({ data: { fromId: from.id, toId: to.id } });
+    }
+  }
+
+  for (const x of solutions) {
+    const from = await prisma.solution.findUnique({ where: { slug: x.slug } });
+    if (!from) continue;
+    await prisma.solutionServiceRelation.deleteMany({ where: { solutionId: from.id } });
+    for (const slug of x.related_services || []) {
+      const service = await prisma.service.findUnique({ where: { slug } });
+      if (service) await prisma.solutionServiceRelation.create({ data: { solutionId: from.id, serviceId: service.id } });
+    }
+    await prisma.solutionRelation.deleteMany({ where: { fromId: from.id } });
+    for (const slug of x.related_solutions || []) {
+      const to = await prisma.solution.findUnique({ where: { slug } });
+      if (to) await prisma.solutionRelation.create({ data: { fromId: from.id, toId: to.id } });
+    }
+  }
+
+  for (const x of industries) {
+    const from = await prisma.industry.findUnique({ where: { slug: x.slug } });
+    if (!from) continue;
+    await prisma.industryServiceRelation.deleteMany({ where: { industryId: from.id } });
+    for (const slug of x.related_services || []) {
+      const service = await prisma.service.findUnique({ where: { slug } });
+      if (service) await prisma.industryServiceRelation.create({ data: { industryId: from.id, serviceId: service.id } });
+    }
+  }
+
+  for (const x of cases) {
+    const from = await prisma.caseStudy.findUnique({ where: { slug: x.slug } });
+    if (!from) continue;
+    await prisma.caseStudyServiceRelation.deleteMany({ where: { caseStudyId: from.id } });
+    for (const slug of x.related_services || []) {
+      const service = await prisma.service.findUnique({ where: { slug } });
+      if (service) await prisma.caseStudyServiceRelation.create({ data: { caseStudyId: from.id, serviceId: service.id } });
+    }
+  }
+
+  for (const x of articles) {
+    const from = await prisma.article.findUnique({ where: { slug: x.slug } });
+    if (!from) continue;
+    await prisma.articleServiceRelation.deleteMany({ where: { articleId: from.id } });
+    for (const slug of x.related_services || []) {
+      const service = await prisma.service.findUnique({ where: { slug } });
+      if (service) await prisma.articleServiceRelation.create({ data: { articleId: from.id, serviceId: service.id } });
+    }
+  }
+
   const legalPages = read('legal.json');
   for (const x of legalPages) {
     await prisma.legalPage.upsert({
