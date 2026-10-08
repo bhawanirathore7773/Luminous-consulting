@@ -8,11 +8,11 @@ export class LeadsService {
 
   create(dto: CreateLeadDto) {
     if (dto.website) return null;
-    const { website, ...lead } = dto;
+    const { website, source, ...lead } = dto;
     return this.prisma.lead.create({
       data: {
         ...lead,
-        source: 'contact_page',
+        source: source || 'contact_page',
       },
     });
   }
