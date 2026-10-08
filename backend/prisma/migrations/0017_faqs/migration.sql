@@ -1,0 +1,1 @@
+CREATE TABLE `faqs` (`id` INT NOT NULL AUTO_INCREMENT, `target_type` VARCHAR(40) NOT NULL, `target_id` INT NOT NULL, `question` VARCHAR(255) NOT NULL, `answer` TEXT NOT NULL, `sort_order` INT NOT NULL DEFAULT 0, PRIMARY KEY (`id`), INDEX `faqs_target_type_target_id_sort_order_idx` (`target_type`,`target_id`,`sort_order`)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
