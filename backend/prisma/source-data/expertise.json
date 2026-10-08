@@ -1,0 +1,82 @@
+[
+  [
+    "platforms",
+    "S/4HANA"
+  ],
+  [
+    "platforms",
+    "SAP ECC"
+  ],
+  [
+    "platforms",
+    "SAP HANA"
+  ],
+  [
+    "platforms",
+    "SAP BTP"
+  ],
+  [
+    "technologies",
+    "ABAP"
+  ],
+  [
+    "technologies",
+    "ABAP Cloud / RAP"
+  ],
+  [
+    "technologies",
+    "Fiori / Fiori Elements"
+  ],
+  [
+    "technologies",
+    "UI5"
+  ],
+  [
+    "technologies",
+    "OData"
+  ],
+  [
+    "technologies",
+    "SAP BTP Integration Suite"
+  ],
+  [
+    "business_applications",
+    "EWM"
+  ],
+  [
+    "business_applications",
+    "TM"
+  ],
+  [
+    "functional_areas",
+    "FI"
+  ],
+  [
+    "functional_areas",
+    "CO"
+  ],
+  [
+    "functional_areas",
+    "MM"
+  ],
+  [
+    "functional_areas",
+    "SD"
+  ],
+  [
+    "functional_areas",
+    "PP"
+  ],
+  [
+    "functional_areas",
+    "QM"
+  ],
+  [
+    "functional_areas",
+    "PM"
+  ],
+  [
+    "functional_areas",
+    "PS"
+  ]
+]
