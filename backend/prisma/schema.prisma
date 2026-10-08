@@ -26,11 +26,12 @@ model Service {
   updatedAt          DateTime @updatedAt @map("updated_at")
 
   listItems          ServiceListItem[]
-  faqs               Faq[]
   relatedFrom        ServiceRelation[] @relation("ServiceRelationFrom")
   relatedTo          ServiceRelation[] @relation("ServiceRelationTo")
   caseStudyRelations CaseStudyServiceRelation[]
   articleRelations   ArticleServiceRelation[]
+  industryServiceRelations IndustryServiceRelation[] @relation("ServiceIndustryRelations")
+  solutionServiceRelations SolutionServiceRelation[] @relation("ServiceSolutionRelations")
 
   @@index([featured, sortOrder])
   @@map("services")
@@ -78,7 +79,6 @@ model Industry {
   listItems IndustryListItem[]
   caseStudies CaseStudy[]
   serviceRelations IndustryServiceRelation[]
-  faqs Faq[]
 
   @@map("industries")
 }
@@ -101,7 +101,7 @@ model IndustryServiceRelation {
   serviceId  Int @map("service_id")
 
   industry Industry @relation(fields: [industryId], references: [id], onDelete: Cascade)
-  service  Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  service  Service @relation("ServiceIndustryRelations", fields: [serviceId], references: [id], onDelete: Cascade)
 
   @@id([industryId, serviceId])
   @@map("industry_service_relations")
@@ -127,7 +127,6 @@ model Solution {
   serviceRelations SolutionServiceRelation[]
   relatedFrom      SolutionRelation[] @relation("SolutionRelationFrom")
   relatedTo        SolutionRelation[] @relation("SolutionRelationTo")
-  faqs             Faq[]
 
   @@map("solutions")
 }
@@ -161,7 +160,7 @@ model SolutionServiceRelation {
   serviceId  Int @map("service_id")
 
   solution Solution @relation(fields: [solutionId], references: [id], onDelete: Cascade)
-  service Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  service Service @relation("ServiceSolutionRelations", fields: [serviceId], references: [id], onDelete: Cascade)
 
   @@id([solutionId, serviceId])
   @@map("solution_service_relations")
