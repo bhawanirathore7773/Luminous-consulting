@@ -1,0 +1,119 @@
+import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
+import path from 'path';
+
+const prisma = new PrismaClient();
+const dir = path.resolve(__dirname, 'source-data');
+
+const read = (name: string) => {
+  const file = path.join(dir, name);
+  if (!fs.existsSync(file)) return [];
+  return JSON.parse(fs.readFileSync(file, 'utf8'));
+};
+
+async function faq(targetType: string, targetId: number, faqs: any[] = []) {
+  for (let i = 0; i < faqs.length; i++) {
+    const [question, answer] = Array.isArray(faqs[i]) ? faqs[i] : [faqs[i].question, faqs[i].answer];
+    await prisma.faq.create({ data: { targetType, targetId, question, answer, sortOrder: i } });
+  }
+}
+
+async function main() {
+  const services = read('services.json');
+  for (const x of services) {
+    const service = await prisma.service.upsert({
+      where: { slug: x.slug },
+      update: {
+        name:x.name, shortSummary:x.short_summary, heroIntro:x.hero_intro,
+        businessProblem:x.business_problem, deliveryApproach:x.delivery_approach,
+        engagementModel:x.engagement_model, whoItsFor:x.who_its_for,
+        ctaLabel:x.cta_label || 'Talk to an SAP Expert', featured:!!x.featured,
+        sortOrder:x.order || 0, metaTitle:x.meta_title || null, metaDescription:x.meta_description || null
+      },
+      create: {
+        slug:x.slug, name:x.name, shortSummary:x.short_summary, heroIntro:x.hero_intro,
+        businessProblem:x.business_problem, deliveryApproach:x.delivery_approach,
+        engagementModel:x.engagement_model, whoItsFor:x.who_its_for,
+        ctaLabel:x.cta_label || 'Talk to an SAP Expert', featured:!!x.featured,
+        sortOrder:x.order || 0, metaTitle:x.meta_title || null, metaDescription:x.meta_description || null
+      }
+    });
+    await prisma.serviceListItem.deleteMany({where:{serviceId:service.id}});
+    for (const section of ['what_we_solve','capabilities','technology','deliverables']) {
+      const rows = x[section] || [];
+      await prisma.serviceListItem.createMany({data:rows.map((text:string,i:number)=>({serviceId:service.id,section,text,sortOrder:i}))});
+    }
+    await prisma.faq.deleteMany({where:{targetType:'service',targetId:service.id}});
+    await faq('service',service.id,x.faqs);
+  }
+
+  const solutions = read('solutions.json');
+  for (const x of solutions) {
+    const solution = await prisma.solution.upsert({
+      where:{slug:x.slug},
+      update:{name:x.name,shortSummary:x.short_summary,heroIntro:x.hero_intro,businessProblem:x.business_problem,approach:x.approach,whoItsFor:x.who_its_for,ctaLabel:x.cta_label||'Talk to an SAP Expert',sortOrder:x.order||0,metaTitle:x.meta_title||null,metaDescription:x.meta_description||null},
+      create:{slug:x.slug,name:x.name,shortSummary:x.short_summary,heroIntro:x.hero_intro,businessProblem:x.business_problem,approach:x.approach,whoItsFor:x.who_its_for,ctaLabel:x.cta_label||'Talk to an SAP Expert',sortOrder:x.order||0,metaTitle:x.meta_title||null,metaDescription:x.meta_description||null}
+    });
+    await prisma.solutionListItem.deleteMany({where:{solutionId:solution.id}});
+    for (const section of ['what_this_includes','outcomes']) {
+      const rows=x[section]||[];
+      await prisma.solutionListItem.createMany({data:rows.map((text:string,i:number)=>({solutionId:solution.id,section,text,sortOrder:i}))});
+    }
+    await prisma.faq.deleteMany({where:{targetType:'solution',targetId:solution.id}});
+    await faq('solution',solution.id,x.faqs);
+  }
+
+  const industries = read('industries.json');
+  for (const x of industries) {
+    const industry=await prisma.industry.upsert({
+      where:{slug:x.slug},
+      update:{name:x.name,shortSummary:x.short_summary,heroIntro:x.hero_intro,sapLandscape:x.sap_landscape,outcomes:x.outcomes,ctaLabel:x.cta_label||'Discuss Your Industry Challenge',sortOrder:x.order||0,metaTitle:x.meta_title||null,metaDescription:x.meta_description||null},
+      create:{slug:x.slug,name:x.name,shortSummary:x.short_summary,heroIntro:x.hero_intro,sapLandscape:x.sap_landscape,outcomes:x.outcomes,ctaLabel:x.cta_label||'Discuss Your Industry Challenge',sortOrder:x.order||0,metaTitle:x.meta_title||null,metaDescription:x.meta_description||null}
+    });
+    await prisma.industryListItem.deleteMany({where:{industryId:industry.id}});
+    for(const section of ['challenges','processes','modules','integration_requirements','transformation_opportunities','typical_use_cases']){
+      const rows=x[section]||[];
+      await prisma.industryListItem.createMany({data:rows.map((text:string,i:number)=>({industryId:industry.id,section,text,sortOrder:i}))});
+    }
+    await prisma.faq.deleteMany({where:{targetType:'industry',targetId:industry.id}});
+    await faq('industry',industry.id,x.faqs);
+  }
+
+  const expertise=read('expertise.json');
+  await prisma.expertiseItem.deleteMany();
+  for(let i=0;i<expertise.length;i++){
+    const [category,name]=expertise[i];
+    await prisma.expertiseItem.create({data:{category,name,description:'',sortOrder:i}});
+  }
+
+  const cases=read('case_studies.json');
+  for(const x of cases){
+    const industry=x.industry_slug ? await prisma.industry.findUnique({where:{slug:x.industry_slug}}):null;
+    const item=await prisma.caseStudy.upsert({
+      where:{slug:x.slug},
+      update:{title:x.title,shortSummary:x.short_summary,industryId:industry?.id||null,businessChallenge:x.business_challenge,sapEnvironment:x.sap_environment,objective:x.objective,approach:x.approach,solution:x.solution,technologyUsed:x.technology_used,outcome:x.outcome,sortOrder:x.order||0,metaTitle:x.meta_title||null,metaDescription:x.meta_description||null},
+      create:{slug:x.slug,title:x.title,shortSummary:x.short_summary,industryId:industry?.id||null,businessChallenge:x.business_challenge,sapEnvironment:x.sap_environment,objective:x.objective,approach:x.approach,solution:x.solution,technologyUsed:x.technology_used,outcome:x.outcome,sortOrder:x.order||0,metaTitle:x.meta_title||null,metaDescription:x.meta_description||null}
+    });
+    await prisma.caseStudyServiceRelation.deleteMany({where:{caseStudyId:item.id}});
+    for(const slug of x.related_services||[]){
+      const service=await prisma.service.findUnique({where:{slug}});
+      if(service) await prisma.caseStudyServiceRelation.create({data:{caseStudyId:item.id,serviceId:service.id}});
+    }
+  }
+
+  const articles=read('insights.json');
+  for(const x of articles){
+    const article=await prisma.article.upsert({
+      where:{slug:x.slug},
+      update:{title:x.title,summary:x.summary,author:x.author||'SAP Practice Team',publishedDate:new Date(x.published_date),category:x.category,contentType:x.content_type,content:x.content,ctaLabel:x.cta_label||'Talk to an SAP Expert',sortOrder:x.order||0,metaTitle:x.meta_title||null,metaDescription:x.meta_description||null},
+      create:{slug:x.slug,title:x.title,summary:x.summary,author:x.author||'SAP Practice Team',publishedDate:new Date(x.published_date),category:x.category,contentType:x.content_type,content:x.content,ctaLabel:x.cta_label||'Talk to an SAP Expert',sortOrder:x.order||0,metaTitle:x.meta_title||null,metaDescription:x.meta_description||null}
+    });
+    await prisma.articleServiceRelation.deleteMany({where:{articleId:article.id}});
+    for(const slug of x.related_services||[]){
+      const service=await prisma.service.findUnique({where:{slug}});
+      if(service) await prisma.articleServiceRelation.create({data:{articleId:article.id,serviceId:service.id}});
+    }
+  }
+}
+
+main().catch(e=>{console.error(e);process.exit(1)}).finally(()=>prisma.$disconnect());
