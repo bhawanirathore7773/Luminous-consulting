@@ -1,0 +1,50 @@
+name: Validate NestJS Migration
+
+on:
+  push:
+    branches:
+      - migration/nestjs-prisma-mysql-hostinger
+  pull_request:
+    branches:
+      - migration/nestjs-prisma-mysql-hostinger
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      - name: Install frontend
+        working-directory: frontend
+        run: npm install
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      - name: Install backend
+        working-directory: backend
+        run: npm install
+
+      - name: Generate Prisma client
+        working-directory: backend
+        run: npm run prisma:generate
+
+      - name: Validate Prisma schema
+        working-directory: backend
+        run: npm run prisma:validate
+
+      - name: Build NestJS backend
+        working-directory: backend
+        run: npm run build
