@@ -9,7 +9,8 @@
     "build": "npm run build:frontend && npm run build:backend",
     "start": "cd backend && npm run start:prod",
     "db:init": "cd backend && npm run prisma:migrate && npm run prisma:seed",
-    "build:production": "npm run build && npm run db:init"
+    "db:deploy": "cd backend && npm run prisma:migrate",
+    "db:seed": "cd backend && npm run prisma:seed"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.13"
