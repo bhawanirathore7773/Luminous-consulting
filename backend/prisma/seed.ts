@@ -18,7 +18,47 @@ async function faq(targetType: string, targetId: number, faqs: any[] = []) {
   }
 }
 
+async function seedTeamMembers() {
+  const members = [
+    {
+      name: 'Bhawani Singh',
+      role: 'SAP ABAP Developer',
+      imageUrl: '/team/bhawani-singh.webp',
+      linkedinUrl: 'https://www.linkedin.com/',
+      category: 'Technical',
+      expertise: 'SAP ABAP development, reports, ALV, Smart Forms and SAP technical solutions.',
+      modules: 'SAP ABAP, SAP MM',
+      technologies: 'ABAP, ALV, Smart Forms, SQL, Python, Django',
+      industries: 'Manufacturing, Enterprise IT',
+      certifications: '',
+      sortOrder: 1,
+    },
+    {
+      name: 'Dheeraj Nishad',
+      role: 'SAP S/4HANA FICO Consultant',
+      imageUrl: '/team/dheeraj-nishad.webp',
+      linkedinUrl: 'https://www.linkedin.com/in/dheeraj-nishad-a52b23206',
+      category: 'Functional',
+      expertise: 'SAP FICO, financial management, implementation, rollout, production support, migration and SAP integration.',
+      modules: 'SAP FI/CO, S/4HANA',
+      technologies: 'SAP FICO, SAP Integration, SAP S/4HANA',
+      industries: 'Manufacturing, Enterprise IT',
+      certifications: '',
+      sortOrder: 2,
+    },
+  ];
+
+  for (const member of members) {
+    await prisma.teamMember.upsert({
+      where: { id: member.sortOrder },
+      update: member,
+      create: member,
+    });
+  }
+}
+
 async function main() {
+  await seedTeamMembers();
   const initialized = await prisma.appInitialization.findUnique({ where: { id: 1 } });
   if (initialized) {
     console.log('Database initialization already completed; skipping seed.');
