@@ -114,6 +114,8 @@ model Solution {
   shortSummary    String   @map("short_summary") @db.VarChar(200)
   heroIntro       String   @map("hero_intro") @db.Text
   businessProblem String   @map("business_problem") @db.Text
+  approach        String   @db.Text
+  whoItsFor       String   @map("who_its_for") @db.Text
   ctaLabel        String   @map("cta_label") @db.VarChar(80)
   metaTitle       String?  @map("meta_title") @db.VarChar(70)
   metaDescription String?  @map("meta_description") @db.VarChar(160)
@@ -267,6 +269,7 @@ model Lead {
   timeline         String?  @db.VarChar(30)
   estimatedScope   String?  @map("estimated_scope") @db.VarChar(30)
   message          String?  @db.LongText
+  website          String?  @db.VarChar(200)
   source           String   @default("contact_page") @db.VarChar(50)
   createdAt        DateTime @default(now()) @map("created_at")
 
