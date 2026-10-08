@@ -1,0 +1,22 @@
+CREATE TABLE `case_studies` (
+  `id` INT NOT NULL AUTO_INCREMENT,
+  `title` VARCHAR(200) NOT NULL,
+  `slug` VARCHAR(220) NOT NULL,
+  `short_summary` VARCHAR(200) NOT NULL,
+  `industry_id` INT NULL,
+  `business_challenge` TEXT NOT NULL,
+  `sap_environment` VARCHAR(200) NOT NULL,
+  `objective` TEXT NOT NULL,
+  `approach` TEXT NOT NULL,
+  `solution` TEXT NOT NULL,
+  `technology_used` VARCHAR(300) NOT NULL,
+  `outcome` TEXT NOT NULL,
+  `meta_title` VARCHAR(70) NULL,
+  `meta_description` VARCHAR(160) NULL,
+  `sort_order` INT NOT NULL DEFAULT 0,
+  `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+  `updated_at` DATETIME(3) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `case_studies_slug_key` (`slug`),
+  INDEX `case_studies_industry_id_idx` (`industry_id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
