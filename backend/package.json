@@ -7,6 +7,7 @@
     "build:frontend": "cd ../frontend && npm install --include=dev && npm run build",
     "package:frontend": "rm -rf dist/public && cp -R ../frontend/dist dist/public && test -f dist/public/index.html && grep -q \"./assets/\" dist/public/index.html && ! grep -q \"/src/main.tsx\" dist/public/index.html && echo \"Verified frontend production assets\"",
     "start": "node dist/main.js",
+    "initialize": "npm run prisma:migrate && npm run prisma:seed",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main.js",
     "prisma:generate": "prisma generate",
