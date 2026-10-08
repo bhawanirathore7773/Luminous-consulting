@@ -1,6 +1,9 @@
 import { IsEmail, IsOptional, IsString, MaxLength } from 'class-validator';
 
 export class CreateLeadDto {
+  @IsOptional()
+  @IsString()
+  website?: string;
   @IsString() @MaxLength(120) name!: string;
   @IsEmail() @MaxLength(255) workEmail!: string;
   @IsString() @MaxLength(150) company!: string;
