@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Design tokens (Section 4 of the build spec).
+  Stored as space-separated RGB triplets — not hex — so Tailwind's
+  opacity modifiers work. See tailwind.config.js.
+*/
+@layer base {
+  :root {
+    --color-navy-950: 11 18 32;
+    --color-navy-800: 19 33 59;
+    --color-accent: 27 95 168;
+    --color-accent-dark: 20 74 135;
+    --color-ink: 26 35 50;
+    --color-gray-50: 245 247 250;
+    --color-gray-200: 226 230 235;
+    --color-gray-500: 107 114 128;
+  }
+
+  html {
+    font-family: "Inter", "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  }
+
+  summary {
+    list-style: none;
+  }
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .flow-pulse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: flow-travel 4s linear infinite;
+  }
+}
+
+@keyframes flow-travel {
+  0%   { transform: translateY(0); opacity: 0.9; }
+  50%  { transform: translateY(210px); opacity: 0.4; }
+  100% { transform: translateY(420px); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-pulse {
+    animation: none;
+    opacity: 0.6;
+  }
+}
+
+@layer components {
+  html.mobile-nav-open,
+  body.mobile-nav-open {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
+  body.mobile-nav-open {
+    touch-action: none;
+  }
+
+  /* Keep the single trigger in its normal header position. The header itself
+     sits above the drawer, so the hamburger becomes the only X button. */
+  #site-header {
+    isolation: isolate;
+  }
+
+  #mobile-menu-toggle {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  #mobile-navigation {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  #mobile-menu-backdrop {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    #mobile-navigation,
+    #mobile-menu-backdrop,
+    .mobile-menu-line {
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+
+/* Mobile navigation: keep the header/control pinned to the viewport.
+   This is intentionally separate from the drawer so scrolling the page
+   never moves the hamburger/X out of view. */
+@media (max-width: 1023px) {
+  #site-header {
+    position: fixed !important;
+    top: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200;
+  }
+
+  #main-content {
+    padding-top: 65px;
+  }
+
+  #mobile-navigation {
+    top: 0;
+    bottom: 0;
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+}
+
+/* Keep the mobile trigger visually identical in its header position while
+   the menu is open; only the three lines animate into a single X. */
+#mobile-menu-toggle {
+  position: relative;
+  z-index: 220;
+}
+
+#mobile-menu-toggle .mobile-menu-line {
+  transform-origin: center;
+  will-change: transform, opacity;
+}
