@@ -8,7 +8,7 @@ async function apiFetch(input: RequestInfo | URL, init: RequestInit = {}, timeou
  const controller = new AbortController();
  const timer = window.setTimeout(() => controller.abort(), timeout);
  try {
-  return await apiFetch(input, { ...init, signal: controller.signal });
+  return await fetch(input, { ...init, signal: controller.signal });
  } finally {
   window.clearTimeout(timer);
  }
