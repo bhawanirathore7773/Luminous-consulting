@@ -6,11 +6,23 @@
     "watch:css": "tailwindcss -i ./core/static/core/css/src/input.css -o ./core/static/core/css/dist/styles.css --watch",
     "build:frontend": "cd frontend && npm install --include=dev && npm run build",
     "build:backend": "cd backend && npm install --include=dev && npm run prisma:generate && npm run build",
-    "build": "npm run build:frontend && npm run build:backend",
+    "package:hostinger": "rm -rf backend/dist/public && cp -R frontend/dist backend/dist/public",
+    "build": "npm run build:frontend && npm run build:backend && npm run package:hostinger",
     "start": "cd backend && npm run start:prod",
     "db:init": "cd backend && npm run prisma:migrate && npm run prisma:seed",
     "db:deploy": "cd backend && npm run prisma:migrate",
     "db:seed": "cd backend && npm run prisma:seed"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/platform-express": "^11.1.6",
+    "@prisma/client": "^6.17.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.13"
