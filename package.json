@@ -3,7 +3,11 @@
   "private": true,
   "scripts": {
     "build:css": "tailwindcss -i ./core/static/core/css/src/input.css -o ./core/static/core/css/dist/styles.css --minify",
-    "watch:css": "tailwindcss -i ./core/static/core/css/src/input.css -o ./core/static/core/css/dist/styles.css --watch"
+    "watch:css": "tailwindcss -i ./core/static/core/css/src/input.css -o ./core/static/core/css/dist/styles.css --watch",
+    "build:frontend": "cd frontend && npm install && npm run build",
+    "build:backend": "cd backend && npm install && npm run prisma:generate && npm run build",
+    "build": "npm run build:frontend && npm run build:backend",
+    "start": "cd backend && npm run start:prod"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.13"
