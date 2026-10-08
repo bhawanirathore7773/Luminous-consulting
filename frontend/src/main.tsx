@@ -52,7 +52,7 @@ return <Layout title={(item.metaTitle||title)+" — Luminous Consulting"} descri
 <CTA/></Layout>}
 function Contact(){
  const [status,setStatus]=useState("idle"); const [fromAssessment,setFromAssessment]=useState(false);
- useEffect(()=>{const p=new URLSearchParams(window.location.search);if(p.get("source")==="assessment"){setFromAssessment(true);const s=p.get("summary");if(s){const el=document.getElementById("lead-message");if(el)el.value=s;}}},[]);
+ useEffect(()=>{const p=new URLSearchParams(window.location.search);if(p.get("source")==="assessment"){setFromAssessment(true);const s=p.get("summary");if(s){const el=document.getElementById("lead-message") as HTMLTextAreaElement|null;if(el)el.value=s;}}},[]);
  const services=[["consulting","Consulting"],["implementation","Implementation"],["migration","Migration"],["integration","Integration"],["development","Development"],["ams","AMS"],["support","Support"],["btp","BTP"],["data_analytics","Data & Analytics"],["security","Security"],["testing","Testing"],["other","Other"]];
  const env=[["ecc","ECC"],["s4hana","S/4HANA"],["cloud_erp","SAP Cloud ERP"],["btp","BTP"],["successfactors","SuccessFactors"],["ariba","Ariba"],["other","Other"],["not_sure","Not sure"]];
  const stages=[["evaluating","Evaluating options"],["planning","Planning"],["ready_to_start","Ready to start"],["in_progress","Already in progress"]];
