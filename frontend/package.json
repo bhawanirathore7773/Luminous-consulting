@@ -1,6 +1,6 @@
 {
   "name":"luminous-consulting-frontend","private":true,"version":"1.0.0",
-  "scripts":{"dev":"npm run build:css && vite","build":"npm run build:css && vite build --base=./","build:css":"tailwindcss -i ./src/styles/source-design.css -o ./src/styles/styles.css --minify","preview":"vite preview"},
+  "scripts":{"dev":"npm run build:css && vite","build":"npm run build:css && vite build","build:css":"tailwindcss -i ./src/styles/source-design.css -o ./src/styles/styles.css --minify","preview":"vite preview"},
   "dependencies":{"react":"^19.1.1","react-dom":"^19.1.1"},
   "devDependencies":{"@vitejs/plugin-react":"^5.0.4","tailwindcss":"^3.4.13","typescript":"^5.9.3","vite":"^7.1.7"}
 }
