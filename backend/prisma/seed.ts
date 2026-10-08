@@ -34,7 +34,7 @@ async function seedTeamMembers() {
       sortOrder: 1,
     },
     {
-      name: 'Dheeraj Nishad',
+      name: 'Dheeraj Kashyap',
       role: 'SAP S/4HANA FICO Consultant',
       imageUrl: '/team/dheeraj-nishad.jpg',
       linkedinUrl: 'https://www.linkedin.com/in/dheeraj-nishad-a52b23206',
