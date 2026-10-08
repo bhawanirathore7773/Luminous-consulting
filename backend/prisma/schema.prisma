@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model AppInitialization {
+  id           Int      @id
+  initializedAt DateTime @default(now()) @map("initialized_at")
+
+  @@map("app_initialization")
+}
+
 model Service {
   id                 Int      @id @default(autoincrement())
   name               String   @db.VarChar(120)
