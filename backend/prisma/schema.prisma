@@ -168,20 +168,39 @@ model SolutionServiceRelation {
 }
 
 model CaseStudy {
-  id              Int      @id @default(autoincrement())
-  name            String   @db.VarChar(180)
-  slug            String   @unique @db.VarChar(200)
-  industry        String   @db.VarChar(120)
-  shortSummary    String   @map("short_summary") @db.Text
-  label            String?  @db.VarChar(180)
-  content         String   @db.LongText
-  metaTitle       String?  @map("meta_title") @db.VarChar(70)
-  metaDescription String?  @map("meta_description") @db.VarChar(160)
-  sortOrder       Int      @default(0) @map("sort_order")
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
+  id                Int      @id @default(autoincrement())
+  title             String   @db.VarChar(200)
+  slug              String   @unique @db.VarChar(220)
+  shortSummary      String   @map("short_summary") @db.VarChar(200)
+  industryId        Int?     @map("industry_id")
+  businessChallenge String   @map("business_challenge") @db.Text
+  sapEnvironment    String   @map("sap_environment") @db.VarChar(200)
+  objective         String   @db.Text
+  approach          String   @db.Text
+  solution          String   @db.Text
+  technologyUsed    String   @map("technology_used") @db.VarChar(300)
+  outcome           String   @db.Text
+  metaTitle         String?  @map("meta_title") @db.VarChar(70)
+  metaDescription   String?  @map("meta_description") @db.VarChar(160)
+  sortOrder         Int      @default(0) @map("sort_order")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
+  industry        Industry? @relation(fields: [industryId], references: [id], onDelete: SetNull)
+  relatedServices CaseStudyServiceRelation[]
+
+  @@index([industryId])
   @@map("case_studies")
+}
+
+model CaseStudyServiceRelation {
+  caseStudyId Int @map("case_study_id")
+  serviceId   Int @map("service_id")
+  caseStudy   CaseStudy @relation(fields: [caseStudyId], references: [id], onDelete: Cascade)
+  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+
+  @@id([caseStudyId, serviceId])
+  @@map("case_study_service_relations")
 }
 
 model Article {
