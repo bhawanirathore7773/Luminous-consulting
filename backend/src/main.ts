@@ -23,8 +23,9 @@ async function bootstrap() {
   app.setGlobalPrefix('api', { exclude: ['robots.txt', 'sitemap.xml'] });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
-  await app.init();
-
+  // Register the frontend middleware before Nest initializes its routes.
+  // Otherwise Nest's default 404 handler can terminate requests before
+  // Express gets a chance to serve the React app.
   if (fs.existsSync(frontendDist)) {
     app.use(express.static(frontendDist, { index: 'index.html' }));
 
@@ -46,6 +47,7 @@ async function bootstrap() {
     });
   }
 
+  await app.init();
   await app.listen(port, '0.0.0.0');
 }
 bootstrap();
