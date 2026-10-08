@@ -30,6 +30,7 @@ model Service {
   relatedFrom        ServiceRelation[] @relation("ServiceRelationFrom")
   relatedTo          ServiceRelation[] @relation("ServiceRelationTo")
   caseStudyRelations CaseStudyServiceRelation[]
+  articleRelations   ArticleServiceRelation[]
 
   @@index([featured, sortOrder])
   @@map("services")
