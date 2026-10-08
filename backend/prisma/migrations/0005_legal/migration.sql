@@ -1,0 +1,1 @@
+CREATE TABLE `legal_pages` (`id` INT NOT NULL AUTO_INCREMENT, `slug` VARCHAR(100) NOT NULL, `title` VARCHAR(200) NOT NULL, `content` LONGTEXT NOT NULL, `meta_title` VARCHAR(70) NULL, `meta_description` VARCHAR(160) NULL, PRIMARY KEY (`id`), UNIQUE KEY `legal_pages_slug_key` (`slug`)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
