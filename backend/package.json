@@ -8,7 +8,7 @@
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main.js",
     "prisma:generate": "prisma generate",
-    "prisma:migrate": "prisma db push --accept-data-loss=false",
+    "prisma:migrate": "prisma migrate deploy",
     "prisma:validate": "prisma validate",
     "prisma:seed": "tsx prisma/seed.ts",
     "prisma:source-export": "python scripts/export_django_seed.py"
