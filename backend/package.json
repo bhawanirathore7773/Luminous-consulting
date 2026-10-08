@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "nest build",
+    "build": "npm run build:frontend && npm run prisma:generate && nest build && npm run package:frontend",
+    "build:frontend": "cd ../frontend && npm install --include=dev && npm run build",
+    "package:frontend": "rm -rf dist/public && cp -R ../frontend/dist dist/public",
     "start": "node dist/main.js",
     "start:dev": "nest start --watch",
     "start:prod": "node dist/main.js",
