@@ -5,14 +5,14 @@ import { PrismaService } from '../prisma/prisma.service';
 export class ContentService {
   constructor(private readonly prisma: PrismaService) {}
 
-  services() { return this.prisma.service.findMany({ orderBy:{sortOrder:'asc'}, include:{listItems:true,faqs:true,relatedFrom:{include:{to:true}}} }); }
-  service(slug:string) { return this.prisma.service.findUnique({where:{slug},include:{listItems:true,faqs:true,relatedFrom:{include:{to:true}}}}); }
+  services() { return this.prisma.service.findMany({ orderBy:{sortOrder:'asc'}, include:{listItems:true,relatedFrom:{include:{to:true}}} }); }
+  service(slug:string) { return this.prisma.service.findUnique({where:{slug},include:{listItems:true,relatedFrom:{include:{to:true}}}}); }
 
-  industries() { return this.prisma.industry.findMany({orderBy:{sortOrder:'asc'},include:{listItems:true,faqs:true}}); }
-  industry(slug:string) { return this.prisma.industry.findUnique({where:{slug},include:{listItems:true,faqs:true,serviceRelations:{include:{service:true}}}}); }
+  industries() { return this.prisma.industry.findMany({orderBy:{sortOrder:'asc'},include:{listItems:true}}); }
+  industry(slug:string) { return this.prisma.industry.findUnique({where:{slug},include:{listItems:true,serviceRelations:{include:{service:true}}}}); }
 
-  solutions() { return this.prisma.solution.findMany({orderBy:{sortOrder:'asc'},include:{listItems:true,faqs:true,serviceRelations:{include:{service:true}},relatedFrom:{include:{to:true}}}}); }
-  solution(slug:string) { return this.prisma.solution.findUnique({where:{slug},include:{listItems:true,faqs:true,serviceRelations:{include:{service:true}},relatedFrom:{include:{to:true}}}}); }
+  solutions() { return this.prisma.solution.findMany({orderBy:{sortOrder:'asc'},include:{listItems:true,serviceRelations:{include:{service:true}},relatedFrom:{include:{to:true}}}}); }
+  solution(slug:string) { return this.prisma.solution.findUnique({where:{slug},include:{listItems:true,serviceRelations:{include:{service:true}},relatedFrom:{include:{to:true}}}}); }
 
   caseStudies() { return this.prisma.caseStudy.findMany({orderBy:{sortOrder:'asc'},include:{industry:true,relatedServices:{include:{service:true}}}}); }
   caseStudy(slug:string) { return this.prisma.caseStudy.findUnique({where:{slug},include:{industry:true,relatedServices:{include:{service:true}}}}); }
