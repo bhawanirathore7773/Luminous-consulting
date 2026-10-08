@@ -45,6 +45,11 @@ async function main() {
     }
     await prisma.faq.deleteMany({where:{targetType:'service',targetId:service.id}});
     await faq('service',service.id,x.faqs);
+    await prisma.serviceRelation.deleteMany({where:{fromId:service.id}});
+    for (const slug of x.related_services || []) {
+      const to = await prisma.service.findUnique({where:{slug}});
+      if (to) await prisma.serviceRelation.create({data:{fromId:service.id,toId:to.id}});
+    }
   }
 
   const solutions = read('solutions.json');
@@ -61,6 +66,16 @@ async function main() {
     }
     await prisma.faq.deleteMany({where:{targetType:'solution',targetId:solution.id}});
     await faq('solution',solution.id,x.faqs);
+    await prisma.solutionServiceRelation.deleteMany({where:{solutionId:solution.id}});
+    for (const slug of x.related_services || []) {
+      const service = await prisma.service.findUnique({where:{slug}});
+      if (service) await prisma.solutionServiceRelation.create({data:{solutionId:solution.id,serviceId:service.id}});
+    }
+    await prisma.solutionRelation.deleteMany({where:{fromId:solution.id}});
+    for (const slug of x.related_solutions || []) {
+      const to = await prisma.solution.findUnique({where:{slug}});
+      if (to) await prisma.solutionRelation.create({data:{fromId:solution.id,toId:to.id}});
+    }
   }
 
   const industries = read('industries.json');
@@ -77,6 +92,11 @@ async function main() {
     }
     await prisma.faq.deleteMany({where:{targetType:'industry',targetId:industry.id}});
     await faq('industry',industry.id,x.faqs);
+    await prisma.industryServiceRelation.deleteMany({where:{industryId:industry.id}});
+    for (const slug of x.related_services || []) {
+      const service = await prisma.service.findUnique({where:{slug}});
+      if (service) await prisma.industryServiceRelation.create({data:{industryId:industry.id,serviceId:service.id}});
+    }
   }
 
   const expertise=read('expertise.json');
