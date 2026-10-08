@@ -16,7 +16,7 @@ async function bootstrap() {
     origin: config.get('CORS_ORIGIN') || true,
     credentials: true,
   });
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api', { exclude: ['robots.txt', 'sitemap.xml'] });
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
   await app.init();
