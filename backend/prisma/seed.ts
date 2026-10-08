@@ -19,6 +19,12 @@ async function faq(targetType: string, targetId: number, faqs: any[] = []) {
 }
 
 async function main() {
+  const initialized = await prisma.appInitialization.findUnique({ where: { id: 1 } });
+  if (initialized) {
+    console.log('Database initialization already completed; skipping seed.');
+    return;
+  }
+
   const services = read('services.json');
   for (const x of services) {
     const service = await prisma.service.upsert({
@@ -200,6 +206,8 @@ async function main() {
       create: { slug: x.slug, title: x.title, content: x.content, metaTitle: x.meta_title || null, metaDescription: x.meta_description || null },
     });
   }
+  await prisma.appInitialization.create({ data: { id: 1 } });
+  console.log('Database initialization and seed completed.');
 }
 
 main().catch(e=>{console.error(e);process.exit(1)}).finally(()=>prisma.$disconnect());
